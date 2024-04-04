@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Поставки</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        /* Стили для деактивированных кнопок */
+        .disabled-btn {
+            cursor: not-allowed;
+            opacity: 0.5; /* или любое другое значение для указания прозрачности */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* Стили для кнопки открытия модального окна */
+        .open-modal-btn {
+            cursor: pointer;
+            background-color:red;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/supplier_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <br>
+            <br>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Поставка №</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Дата прибытия</th>
+            <th scope="col">Заказчик</th>
+            <th scope="col">Товары</th>
+            <th scope="col">Действия над поставкой</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody th:each="sh: ${supplierShipments}">
+        <tr>
+            <th th:text="${sh.getIdshipment()}"></th>
+            <th th:text="${sh.getStatus()}"></th>
+            <th th:text="${sh.getCreationDate()}"></th>
+            <th th:text="${sh.getArrivalDate()}"></th>
+            <th th:text="${sh.getOrderItems().get(0).getOrder().getFirstName() + ' ' + sh.getOrderItems().get(0).getOrder().getLastName()}"></th>
+            <th>
+                <ul>
+                    <li th:each="item: ${sh.getOrderItems()}">
+                        <p>
+                            <span th:text="${item.getProduct().getName()}"></span>
+                            <span th:text="${item.getStatus()}"></span>
+                            <span th:text="${item.getProduct().getPrice()}"></span>
+                            <span th:text="${item.getQuantity()}"></span>
+                        </p>
+                    </li>
+                </ul>
+            </th>
+            <th>
+                <form th:action="@{/changeShStatus}" method="post">
+                    <input type="hidden" name="shipmentId" th:value="${sh.getIdshipment()}" />
+                    <button type="submit" class="btn btn-primary change-status" th:attr="data-shid=${sh.getIdshipment()}" >Изменить статус</button>
+                </form>
+
+
+                <button class="open-modal-btn" th:onclick="'openModal(' + ${sh.getIdshipment()} + ')'">Задержка доставки</button>
+                <!-- Модальное окно -->
+                <div th:each="sh: ${supplierShipments}" th:id="'customModal' + ${sh.getIdshipment()}" class="modal">
+                    <div class="modal-content">
+                        <!-- Ваша форма для ввода данных -->
+                        <form th:id="'customForm' + ${sh.getIdshipment()}" th:action="@{/problemsWithDelivery}" method="post">
+                            <input type="hidden" th:id="'shipmentIdInput' + ${sh.getIdshipment()}" name="shipmentId" />
+                            <label th:for="'delayInput' + ${sh.getIdshipment()}">Введите количество дней задержки:</label>
+                            <input type="number" th:id="'delayInput' + ${sh.getIdshipment()}" name="delay" required />
+
+                            <label th:for="'descInput' + ${sh.getIdshipment()}">Причина задержки:</label>
+                            <input type="text" th:id="'descInput' + ${sh.getIdshipment()}" name="desc" required />
+                            <button type="submit">Отправить</button>
+                        </form>
+
+                        <!-- Кнопка для закрытия модального окна -->
+                        <button th:onclick="'closeModal(' + ${sh.getIdshipment()} + ')'" >Закрыть</button>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+        $(document).ready(function() {
+        disableButtonsForDeliveredShipments();
+    });
+
+        function disableButtonsForDeliveredShipments() {
+        var deliveredStatus = "ДОСТАВЛЕНО";
+        $('tbody').find('tr').each(function() {
+        var status = $(this).find('th:nth-child(2)').text();
+        if (status === deliveredStatus) {
+        $(this).find('button.change-status, button.open-modal-btn').prop('disabled', true).addClass('disabled-btn');
+    }
+    });
+    }
+
+        function openModal(shipmentId) {
+
+            document.getElementById('shipmentIdInput' + shipmentId).value = shipmentId;
+            document.getElementById('customModal' + shipmentId).style.display = 'flex';
+        }
+
+        function closeModal(shipmentId) {
+            document.getElementById('customModal' + shipmentId).style.display = 'none';
+        }
+
+</script>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head"></head>
+<div th:insert="blocks/user_nav::div"></div>
+<body>
+<div class="container table-container">
+    <table class="table table-striped">
+        <colgroup>
+            <col style="width: 30%">
+            <col style="width: 20%">
+            <col style="width: 25%">
+            <col style="width: 25%">
+        </colgroup>
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Название компании</th>
+            <th scope="col">Адрес</th>
+            <th scope="col">Контактная информация</th>
+            <th scope="col">Рейтинг</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody th:each="supplier : ${suppliers}">
+        <tr>
+            <td th:text="${supplier.companyName}"></td>
+            <td th:text="${supplier.address}"></td>
+            <td th:text="${supplier.contactData}"></td>
+            <td th:text="${supplier.rating}"></td>
+            <td><a th:href="'/supplier_catalog/'+${supplier.idsupplier}" class="btn btn-dark">Просмотреть каталог поставщика</a></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

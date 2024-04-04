@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+
+</head>
+
+<body>
+<div th:insert="blocks/user_nav::div"></div>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Контракт №</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Дата создания</th>
+            <th scope="col">Стоимость</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Поставщик</th>
+            <th scope="col">Действия над контрактом</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody th:each="c: ${userContracts}">
+        <tr>
+            <th th:text="${c.idcontract}"></th>
+            <!--            <th th:text="${orderItems.order.status}"></th>-->
+            <th th:text="${c.status}"></th>
+            <th th:text="${c.dateOfConclusion}"></th>
+            <th th:text="${c.cost}"></th>
+            <th th:text="${c.type}"></th>
+            <th th:text="${c.supplier.companyName}"></th>
+            <th>
+                <a th:href="'/downloadContract/'+${c.idcontract}">Скачать контракт</a>
+
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        var statuses = [];
+
+        $('.table tbody tr').each(function () {
+
+            var status = $(this).find('.order-status').text().trim();
+
+
+            if (status==='ОЖИДАЕТ_КОНТРАКТ')
+            {
+                $(this).find('.accept-order').show();
+            }
+
+
+            statuses.push(status);
+
+        });
+
+        console.log(statuses);
+    });
+</script>
+</body>
+</html>

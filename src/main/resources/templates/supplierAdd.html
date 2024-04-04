@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+<div th:insert="blocks/admin_nav::div" class="header text-white"></div>
+<br>
+<div align="center">
+    <form class="well form-horizontal" action="/supplierAdd "  method="post"  enctype="multipart/form-data" id="form">
+        <label class="col-md-4 control-label">Название</label>
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input name="companyName" placeholder="Название компании" class="form-control"  type="text">
+
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Адрес</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="address" placeholder="Юридический адрес" class="form-control"  type="text">
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Контактная информация</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="contactData" placeholder="Контактное лицо" class="form-control"  type="text" >
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label">e-mail</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input name="e-mail" placeholder="E-mail" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" type="email">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div th:if="${usernameError}" class="alert-danger"  role="alert"><p class="text-danger" th:text="${usernameError}"></p></div>
+        <div th:if="${emailError}" class="alert-danger"  role="alert"><p class="text-danger" th:text="${emailError}"></p></div>
+        <div th:if="${contactDataError}" class="alert-danger"  role="alert"><p class="text-danger" th:text="${contactDataError}"></p></div>
+        <div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4"><br>
+                <input type="submit" class="btn btn-warning" value="Добавить поставщика">
+            </div>
+        </div>
+
+    </form>
+<!--    <div id="errorMessage" style="color: red;"></div>-->
+</div>
+<!--<script>-->
+
+<!--    $(document).ready(function() {-->
+<!--        $('#form').submit(function(event) {-->
+<!--            event.preventDefault(); // Отменить отправку формы по умолчанию-->
+
+<!--            // Получить значение поля контактной информации-->
+<!--            var contactData = $('input[name="contactData"]').val();-->
+
+<!--            // Проверить формат с помощью регулярного выражения-->
+<!--            var pattern = /^[^\s]+ [^\s]+ \d+$/;-->
+<!--            if (!pattern.test(contactData)) {-->
+<!--                // Показать сообщение об ошибке-->
+<!--                $('#errorMessage').text('Пожалуйста, введите данные в правильном формате (через пробел): Фамилия Имя Номер телефона');-->
+<!--                return false;-->
+<!--            }-->
+
+
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+</body>
+
+</html>

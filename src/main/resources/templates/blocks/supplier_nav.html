@@ -1,0 +1,61 @@
+
+  <div th:fragment="supplier_nav">
+    <div class="d-flex flex-column p-3 text-white bg-dark" style="height: 100vh;width: 280px">
+
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <a href="/supplier/" class="nav-link active" aria-current="page">
+        <span class="fs-4">Навигационная панель</span>
+
+      <hr>
+      </a>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a href="/catalog" class="nav-link link-primary text-white" aria-current="page" >
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+            Каталог
+          </a>
+        </li>
+        <li>
+          <a href="/shipping_list" class="nav-link link-primary text-white" >
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+            Доставки
+          </a>
+        </li>
+        <li>
+          <a href="/supplier_orders" class="nav-link link-primary text-white" >
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+            Заказы
+          </a>
+        </li>
+        <li>
+          <a href="/list_shipments" class="nav-link link-primary text-white" >
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+            Поставки
+          </a>
+        </li>
+        <li>
+          <a href="/list_payments" class="nav-link link-primary text-white" >
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+            Оплаты
+          </a>
+        </li>
+      </ul>
+      <hr>
+      <div class="dropdown mt-auto">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://perfectum.ua/media/zoo/images/333_b59c55a420748a3f9bf1e0ddca7a8e5a.webp" alt="" width="32" height="32" class="rounded-circle me-2">
+          <div>
+            <strong th:text="${session.username}"></strong>
+          </div>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow show" aria-labelledby="dropdownUser1" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -34px);" data-popper-placement="top-start">
+          <li><a class="dropdown-item" href="/updateSupplierProfile">Редактировать профиль</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="/logout">Выйти из аккаунта</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="sidebars.js" crossorigin="anonymous"></script>
+

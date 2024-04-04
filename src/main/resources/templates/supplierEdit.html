@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+<body>
+<div th:insert="blocks/admin_nav::div" class="header text-white"></div>
+<div class="container">
+<form action="/supplierEdit" method="post" >
+    <input type="text" name="companyName" th:value="${supplier.companyName}">
+    <input type="text" name="contactData" th:value="${supplier.contactData}">
+    <input type="text" name="address" th:value="${supplier.address}">
+    <input type="hidden" th:value="${supplier.idsupplier}" name="idsupplier">
+    <button type="submit">Сохранить</button>
+</form>
+</div>
+
+</body>
+</html>

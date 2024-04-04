@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+<body>
+<div th:insert="blocks/admin_nav::div" class="header text-white"></div>
+<div class="container table-container">
+    <table class="table table-striped">
+        <colgroup>
+            <col style="width: 30%">
+            <col style="width: 20%">
+            <col style="width: 25%">
+            <col style="width: 25%">
+        </colgroup>
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Имя</th>
+            <th scope="col">Роль</th>
+            <th scope="col">e-mail</th>
+            <th scope="col">Активный</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody th:each="user : ${users}">
+        <tr>
+            <td th:text="${user.login}"></td>
+            <td>
+                <div th:each="userRole : ${user.getRoles()}">
+                    <p th:text="${userRole}"></p>
+                </div>
+            </td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.active}"></td>
+            <td><a th:href="'/userEdit/'+${user.idUser}" class="btn btn-dark">Изменить</a></td>
+            <td><th:block th:if="${user.active}">
+                <a th:href="'/userBlock/'+${user.idUser}" class="btn btn-dark">Заблокировать</a>
+            </th:block>
+                <th:block th:unless="${user.active}">
+                    <a th:href="'/userUnblock/'+${user.idUser}" class="btn btn-dark">Разблокировать</a>
+                </th:block>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

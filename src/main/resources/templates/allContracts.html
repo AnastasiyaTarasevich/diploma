@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+</head>
+<body>
+<div th:insert="blocks/admin_nav::div"></div>
+
+<div class="container">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Дата заключения</th>
+      <th scope="col">Тип</th>
+      <th scope="col">Цена</th>
+      <th scope="col">Статус</th>
+      <th scope="col">Поставщик</th>
+      <th scope="col">Товары</th>
+      <th scope="col">Действия над контрактом</th>
+    </tr>
+    </thead>
+    <tbody th:each="contract: ${contracts}">
+    <tr>
+      <td th:text="${contract.idcontract}"></td>
+      <td th:text="${contract.dateOfConclusion}"></td>
+      <td th:text="${contract.type}"></td>
+      <td th:text="${contract.cost}"></td>
+      <td th:text="${contract.status}"></td>
+      <td th:text="${contract.supplier.companyName}"></td>
+      <td>
+        <ul>
+          <li th:each="orderItem : ${contract.order.orderItems}" th:if="${orderItem.product.supplier.idsupplier == contract.supplier.idsupplier}">
+            <p>Название продукта: <span th:text="${orderItem.product.name}"></span></p>
+            <p>Статус: <span class="order-status" th:text="${orderItem.status}"></span></p>
+            <p>Цена: <span th:text="${orderItem.product.price}"></span></p>
+            <p>Количество: <span th:text="${orderItem.quantity}"></span></p>
+          </li>
+        </ul>
+      </td>
+      <td>
+        <a th:href="'/downloadContract/'+${contract.getIdcontract()}">Скачать контракт</a>
+        <form th:action="@{/signContract}" method="post" id="signContractForm" th:object="${contract.getIdcontract()}">
+          <input type="hidden" name="contractId" th:value="${contract.getIdcontract()}" />
+        </form>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+</body>
+</html>

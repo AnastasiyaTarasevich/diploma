@@ -1,0 +1,29 @@
+<div th:fragment="user_nav">
+    <header class="backHeader   d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark">
+        <div class="col-md-3 mb-2 mb-md-0 " >
+            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+        </div>
+
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="/supplier_reading" class="nav-link px-2 text-white">Просмотр базы поставщиков</a></li>
+            <li class="nav-item"><a href="/user_orders" class="nav-link px-2 text-white">Управление заказами</a></li>
+            <li class="nav-item"><a href="/list_userShipment" class="nav-link px-2 text-white">Управление поставками</a></li>
+            <li class="nav-item"><a href="/user_contracts" class="nav-link px-2 text-white">Управление контрактами</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end d-flex align-items-center">
+            <a class="nav-link me-2" href="/cart">
+                <i class="fa fa-shopping-cart" style="font-size:40px;color:grey; margin-right: 50px;" ></i>
+            </a>
+            <a href="/rate">
+                <button type="button" class="btn btn-outline-light">Оценить поставщиков</button>
+            </a>
+            <a href="/logout">
+                <button type="button" class="btn btn-outline-light">Выйти</button>
+            </a>
+        </div>
+
+    </header>
+</div>

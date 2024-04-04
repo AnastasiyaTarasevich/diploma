@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:insert="blocks/supplier_nav::div" class="header text-white"></div>
+<br>
+<div align="center">
+    <form class="well form-horizontal" action="/shippingAdd " method="post"   enctype="multipart/form-data">
+        <label class="col-md-4 control-label">Название города</label>
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input name="city" placeholder="Город" class="form-control"  type="text">
+            </div>
+        </div>
+
+
+
+        <!-- Text input-->
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Стоимость доставки товара, бел.руб.</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="price" placeholder="Стоимость" class="form-control"  type="text">
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4"><br>
+                <input type="submit" class="btn btn-warning" value="Добавить город доставки" > </input>
+            </div>
+        </div>
+
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

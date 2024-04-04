@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head"></head>
+<body>
+<div th:insert="blocks/supplier_nav::div"></div>
+<h2 align="center">Создайте контракт на поставку</h2>
+<br>
+<div align="center">
+    <form class="well form-horizontal" action="/createContract" method="post"   enctype="multipart/form-data">
+        <label class="col-md-4 control-label">Тип</label>
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input name="type" placeholder="Тип контракта" class="form-control"  type="text" >
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Стоимость</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="cost" placeholder="Стоимость контракта" class="form-control"  type="text">
+                </div>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4"><br>
+                <input type="hidden" name="orderId" th:value="${orderId}"/>
+                <input type="submit" class="btn btn-warning" value="Создать новый контракт" > </input>
+            </div>
+        </div>
+
+        </fieldset>
+    </form>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+<head th:insert="blocks/head::head">
+    <style>
+        /* Стили для расположения элементов */
+        .product-info {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .product-image {
+
+            width: 300px;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        .product-description {
+            flex: 1;
+        }
+        .product-title {
+
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: green;
+            margin-bottom: 10px;
+        }
+        .product-availability {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .product-details {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .product-details ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .product-details li {
+            margin-bottom: 5px;
+        }
+    </style></head>
+
+<div th:insert="blocks/user_nav::div"></div>
+<div class="product-info" >
+    <div class="product-image">
+        <div th:each="i:${product.images}" >
+            <img th:src="*{'/list_prod/'+ i.idimage }" alt="Товар"  height="200px">
+        </div>
+    </div>
+    <div class="product-description">
+        <div class="product-title" th:text="'Название: '+${product.name}"></div>
+        <div class="product-price" th:text="'Цена: '+${product.price}+' руб.'"></div>
+        <div class="product-availability" th:text="'Артикул: '+${product.vendor_code}"></div>
+        <div class="product-availability" th:text="'Категория: '+${product.category.name}"></div>
+        <div class="product-details" th:text="'Дата создания: '+${product.dateOfCreated}"></div>
+        <div class="product-details" th:text="'Описание товара: '+${product.description}"></div>
+    </div>
+</div>
+
+</body>
+</html>

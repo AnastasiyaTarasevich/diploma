@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+<div th:insert="blocks/header::header"></div>
+<body>
+<div class="container">
+
+    <form class="well form-horizontal" action="/login " th:action="@{/mylogin}" method="post" >
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend style="text-align: center;"><h2><b>Авторизируйтесь в системе</b></h2></legend><br>
+
+            <!-- Text input-->
+            <br>
+            <div align="center">
+
+                <label class="col-md-4 control-label">Введите логин</label>
+                <br>
+                <div class="col-md-4 inputGroupContainer">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input name="username" placeholder="Username" class="form-control"  type="text" minlength="4" required>
+                    </div>
+                </div>
+
+                <!-- Text input-->
+                <br>
+                <div class="form-group">
+                    <label class="col-md-4 control-label" > Введите пароль</label>
+                    <br>
+                    <div class="col-md-4 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="password" name="password" placeholder="Password" class="form-control"  type="password" minlength="8" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text input-->
+                <br>
+
+                <span id="password-error" style="color: red;"></span>
+                <!-- Button -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label"></label>
+                    <div class="col-md-4"><br>
+                        <input id="submit" type="submit" class="btn btn-dark" value="Войти" >
+                    </div>
+                    <br>
+
+
+                    <a th:href="@{/missingPassword}">Forgot password?</a>
+                    <div th:if="${errorMessage}" class="error">
+                        <p th:text="${errorMessage}" style="font-weight: bold; color: red;"></p>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+    </form>
+</div>
+
+
+</div>
+<br>
+<div th:insert="blocks/footer::footer"></div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/supplier_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <br><br>
+<div class="container table-container">
+        <a th:href="'/shippingAdd'" class="btn btn-dark mb-3">Добавить новый город доставки</a>
+  <form th:action="'/removeAllSh'" method="post"><button type="submit"  class="btn btn-dark mb-3">Удалить все </button></form>
+    <table class="table table-striped">
+        <colgroup>
+            <col style="width: 30%">
+            <col style="width: 20%">
+            <col style="width: 25%">
+            <col style="width: 25%">
+        </colgroup>
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Город</th>
+            <th scope="col">Цена</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody th:each="sh : ${shipping}">
+        <tr>
+            <td th:text="${sh.getCity()}"></td>
+            <td th:text="${sh.getPrice()}"></td>
+            <td><a th:href="'/shippingEdit/'+${sh.idshipping}" class="btn btn-dark">Изменить</a></td>
+            <td>
+                <form th:action="'/shipping/'+${sh.idshipping}" method="post">  <button type="submit" class="btn btn-sm btn-outline-secondary">Удалить</button></form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

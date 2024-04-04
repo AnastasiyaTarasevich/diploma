@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+</head>
+<body>
+<div th:insert="blocks/user_nav::div"></div>
+<div class="container table-container">
+    <table class="table table-striped">
+        <colgroup>
+            <col style="width: 30%">
+            <col style="width: 20%">
+            <col style="width: 25%">
+            <col style="width: 25%">
+        </colgroup>
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Название компании</th>
+            <th scope="col">Количество срывов поставок</th>
+            <th scope="col">Количество брака в поставках</th>
+            <th scope="col">Средняя оценка по отзывам</th>
+            <th scope="col">Общий рейтинг поставщика</th>
+            <th scope="col">Оценить</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody th:each="supplier : ${suppliers}">
+        <tr>
+            <td th:text="${supplier.companyName}"></td>
+            <td>
+                <span th:text="${supplier.getFailuresCount(failures)}"></span>
+            </td>
+            <td>
+                <span th:text="${supplier.getDefectsCount(defects)}"></span>
+            </td>
+            <td>
+                <span th:text="${supplier.getAverageRating(reviews)}"></span>
+            </td>
+            <td>
+                <span th:text="${supplier.rating}"></span>
+            </td>
+            <td>
+                <form method="post" action="/rate">
+                    <input type="hidden" name="supplierId" th:value="${supplier.idsupplier}">
+                    <input type="hidden" name="defectsCount" th:value="${supplier.getDefectsCount(defects)}">
+                    <input type="hidden" name="reviewsCount" th:value="${supplier.getAverageRating(reviews)}">
+                    <input type="hidden" name="failuresCount" th:value="${supplier.getFailuresCount(failures)}">
+                    <button type="submit" class="btn btn-primary">Оценить поставщика</button>
+                </form>
+            </td>
+
+        </tr>
+
+        </tbody>
+        <form method="post" action="/importReviews" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx">
+            <button type="submit">Импортировать отзывы из Excel</button>
+        </form>
+    </table>
+</div>
+
+
+
+</body>
+</html>

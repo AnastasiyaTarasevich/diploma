@@ -1,0 +1,21 @@
+<div th:fragment="admin_nav">
+    <header class="backHeader   d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark">
+        <div class="col-md-3 mb-2 mb-md-0 " >
+            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+        </div>
+
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="/users_list" class="nav-link px-2 text-white">Управление пользователями</a></li>
+            <li class="nav-item"><a href="/suppliers_list" class="nav-link px-2 text-white">Управление поставщиками</a></li>
+            <li class="nav-item"><a href="/shipmentsAll" class="nav-link px-2 text-white">Управление поставками</a></li>
+            <li class="nav-item"><a href="/allContracts" class="nav-link px-2 text-white">Управление контрактами</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end ">
+            <a href="/logout"><button type="button" class="btn btn-outline-light me-2 ">Выйти</button></a>
+        </div>
+
+    </header>
+    </div>

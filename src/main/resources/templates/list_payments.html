@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head"></head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/supplier_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+<br><br>
+<div class="container">
+    <h2>История оплат</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID оплаты</th>
+            <th scope="col">ID контракта</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Дата заключения контракта</th>
+            <th scope="col">Фамилия Имя</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Используйте Thymeleaf для отображения данных -->
+        <tr th:each="payment : ${payments}">
+            <td th:text="${payment.idpayment}"></td>
+            <td th:text="${payment.contract.getIdcontract()}"></td>
+            <td th:text="${payment.cost}"></td>
+            <td th:text="${#dates.format(payment.contract.dateOfConclusion, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${payment.contract.order.firstName} + ${payment.contract.order.lastName} "></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+</body>
+</html>

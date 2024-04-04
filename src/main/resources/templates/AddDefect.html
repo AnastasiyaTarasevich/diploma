@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head"></head>
+<body>
+<div th:insert="blocks/user_nav::div"></div>
+<h2 align="center">Фиксирование брака</h2>
+<br>
+<div align="center">
+    <form class="well form-horizontal" action="/AddDefect" method="post" >
+        <label class="col-md-4 control-label">Название товара</label>
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input name="nameProduct" placeholder="Название товара" class="form-control"  type="text" >
+                <div th:if="${errorID}" class="invalid-feedback" th:text="${errorID}"></div>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Описание</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="description" placeholder="Описание брака" class="form-control"  type="text">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Количество бракованных товаров</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="quantity" placeholder="Количество брака" class="form-control"  type="number">
+                    <div th:if="${errorQuan}" class="invalid-feedback" th:text="${errorQuan}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4"><br>
+                <input type="hidden" name="shipmentId" th:value="${shipmentId}"/>
+                <input type="submit" class="btn btn-warning" value="Зафиксировать брак" > </input>
+            </div>
+        </div>
+
+        </fieldset>
+    </form>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="blocks/head::head">
+
+<body>
+
+<div th:insert="blocks/admin_nav::div"></div>
+
+
+
+<div class="container">
+    <form action="/userEdit" method="post" >
+        <input type="text" name="login" th:value="${user.login}">
+        <div th:each="role : ${roles}">
+            <input type="radio"  name="userRole" th:value="${role}" th:checked="${#lists.contains(user.roles, role)}" required>
+            <label th:text="${role}" /></label>
+        </div>
+        <input type="hidden" th:value="${user.idUser}" name="Iduser">
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+
+
+</body>
+</html>

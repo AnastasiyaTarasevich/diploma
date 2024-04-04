@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head"></head>
+<div th:insert="blocks/supplier_nav::div"></div>
+<body>
+<h2 align="center">Введите в форму то поле, которое хотите изменить</h2>
+<br>
+<div align="center">
+    <form class="well form-horizontal" th:action="*{'/prod_edit/' +product.idProduct}" method="post"   enctype="multipart/form-data">
+        <label class="col-md-4 control-label">Название</label>
+        <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                <input name="name" placeholder="Название товара" class="form-control"  type="text" th:value="${product.getName()}">
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Артикул</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="vendor_code" placeholder="vendor_code" class="form-control"  type="text" th:value="${product.getVendor_code()}">
+                </div>
+            </div>
+        </div>
+
+        <!-- Text input-->
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Описание товара</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="description" placeholder="Description" class="form-control"  type="text" th:value="${product.getDescription()}">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Цена</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input name="price" placeholder="Price" class="form-control"  type="text" th:value="${product.getPrice()}">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Категория</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <select name="category1">
+
+                        <ul class="dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px" data-bs-theme="light">
+                            <option   th:each="c:${category}"  th:value="${c.name}" th:text ="${c.name}"></option>
+                        </ul>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div th:each="i:${product.images}" >
+            <img th:src="*{'/list_prod/'+ i.idimage }" alt="Товар"  height="200px">
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Первая фотография</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input name="first_file" placeholder="file" class="form-control"  type="file">
+                </div>
+            </div>
+        </div>
+        <br>
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label"></label>
+            <div class="col-md-4"><br>
+                <input type="submit" class="btn btn-warning" value="Изменить товар" > </input>
+            </div>
+        </div>
+
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>
