@@ -36,6 +36,10 @@ public class User implements UserDetails {
     @Basic
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
+
+@Enumerated(EnumType.STRING)
+private Status status;
+
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
