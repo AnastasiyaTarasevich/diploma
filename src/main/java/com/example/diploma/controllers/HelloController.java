@@ -75,8 +75,13 @@ public class HelloController {
         return "for_supplier";
     }
     @GetMapping("/user/")
-    public String getUser(Model model, @AuthenticationPrincipal User user)
+    public String getUser(Model model, @AuthenticationPrincipal User user,HttpSession session)
     {
+        String username = user.getUsername();
+
+        // Сохранение ника пользователя в сессии
+        session.setAttribute("username", username);
+        model.addAttribute("username", username);
         model.addAttribute("login",user.getUsername());
         return "user";
     }

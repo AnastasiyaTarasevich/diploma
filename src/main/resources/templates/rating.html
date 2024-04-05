@@ -3,7 +3,13 @@
 <head th:insert="blocks/head::head">
 </head>
 <body>
-<div th:insert="blocks/user_nav::div"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/user_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <br><br>
 <div class="container table-container">
     <table class="table table-striped">
         <colgroup>
@@ -58,7 +64,9 @@
         </form>
     </table>
 </div>
-
+        </div>
+    </div>
+</div>
 
 
 </body>

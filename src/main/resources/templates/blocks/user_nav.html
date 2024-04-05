@@ -1,29 +1,93 @@
 <div th:fragment="user_nav">
-    <header class="backHeader   d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark">
-        <div class="col-md-3 mb-2 mb-md-0 " >
-            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-                <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-            </a>
-        </div>
+<!--    <header class="backHeader   d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-dark">-->
+<!--        <div class="col-md-3 mb-2 mb-md-0 " >-->
+<!--            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">-->
+<!--                <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>-->
+<!--            </a>-->
+<!--        </div>-->
 
-        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="/supplier_reading" class="nav-link px-2 text-white">Просмотр базы поставщиков</a></li>
-            <li class="nav-item"><a href="/user_orders" class="nav-link px-2 text-white">Управление заказами</a></li>
-            <li class="nav-item"><a href="/list_userShipment" class="nav-link px-2 text-white">Управление поставками</a></li>
-            <li class="nav-item"><a href="/user_contracts" class="nav-link px-2 text-white">Управление контрактами</a></li>
+<!--        <ul class="nav justify-content-center border-bottom pb-3 mb-3">-->
+<!--            <li class="nav-item"><a href="/supplier_reading" class="nav-link px-2 text-white">Просмотр базы поставщиков</a></li>-->
+<!--            <li class="nav-item"><a href="/user_orders" class="nav-link px-2 text-white">Управление заказами</a></li>-->
+<!--            <li class="nav-item"><a href="/list_userShipment" class="nav-link px-2 text-white">Управление поставками</a></li>-->
+<!--            <li class="nav-item"><a href="/user_contracts" class="nav-link px-2 text-white">Управление контрактами</a></li>-->
+<!--        </ul>-->
+
+<!--        <div class="col-md-3 text-end d-flex align-items-center">-->
+<!--            <a class="nav-link me-2" href="/cart">-->
+<!--                <i class="fa fa-shopping-cart" style="font-size:40px;color:grey; margin-right: 50px;" ></i>-->
+<!--            </a>-->
+<!--            <a href="/rate">-->
+<!--                <button type="button" class="btn btn-outline-light">Оценить поставщиков</button>-->
+<!--            </a>-->
+<!--            <a href="/logout">-->
+<!--                <button type="button" class="btn btn-outline-light">Выйти</button>-->
+<!--            </a>-->
+<!--        </div>-->
+
+<!--    </header>-->
+    <div class="d-flex flex-column p-3 text-white bg-dark" style="height: 100vh;width: 280px">
+
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        <a href="/user/" class="nav-link active" aria-current="page">
+            <span class="fs-4">Навигационная панель</span>
+
+            <hr>
+        </a>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/supplier_reading" class="nav-link link-primary text-white" aria-current="page" >
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+                    База поставщиков
+                </a>
+            </li>
+            <li>
+                <a href="/user_orders" class="nav-link link-primary text-white" >
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    Заказы
+                </a>
+            </li>
+            <li>
+                <a href="/list_userShipment" class="nav-link link-primary text-white" >
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+                    Поставки
+                </a>
+            </li>
+            <li>
+                <a href="/user_contracts" class="nav-link link-primary text-white" >
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                    Контракты
+                </a>
+            </li>
+            <li>
+                <a href="/rate" class="nav-link link-primary text-white" >
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+                    Оценить поставщиков
+                </a>
+            </li>
+
         </ul>
+        <hr>
+        <a class="nav-link me-2" href="/cart">
+            <i class="fa fa-shopping-cart" style="font-size:40px;color:grey; margin-right: 50px;" ></i>
+            Корзина
+        </a>
+        <div class="dropdown mt-auto">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://perfectum.ua/media/zoo/images/333_b59c55a420748a3f9bf1e0ddca7a8e5a.webp" alt="" width="32" height="32" class="rounded-circle me-2">
+                <div>
+                    <strong th:text="${session.username}"></strong>
+                </div>
+            </a>
 
-        <div class="col-md-3 text-end d-flex align-items-center">
-            <a class="nav-link me-2" href="/cart">
-                <i class="fa fa-shopping-cart" style="font-size:40px;color:grey; margin-right: 50px;" ></i>
-            </a>
-            <a href="/rate">
-                <button type="button" class="btn btn-outline-light">Оценить поставщиков</button>
-            </a>
-            <a href="/logout">
-                <button type="button" class="btn btn-outline-light">Выйти</button>
-            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow show" aria-labelledby="dropdownUser1" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(0px, -34px);" data-popper-placement="top-start">
+                <li><a class="dropdown-item" href="#">Редактировать профиль</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout">Выйти из аккаунта</a></li>
+            </ul>
         </div>
 
-    </header>
+    </div>
 </div>
+<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="sidebars.js" crossorigin="anonymous"></script>
