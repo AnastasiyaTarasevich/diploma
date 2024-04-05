@@ -1,4 +1,4 @@
-package com.example.diploma.config;
+package com.example.diploma.config.word;
 
 
 import com.example.diploma.models.Contract;

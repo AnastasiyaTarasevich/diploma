@@ -1,6 +1,8 @@
-package com.example.diploma.config;
+package com.example.diploma.config.security;
 
 
+import com.example.diploma.config.security.CustomAuthenticationFailureHandler;
+import com.example.diploma.config.security.CustomAuthenticationSuccessHandler;
 import com.example.diploma.services.UsersDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,11 @@
 package com.example.diploma.services;
 
-import com.example.diploma.models.Roles;
-import com.example.diploma.models.User;
+import com.example.diploma.dto.message.ChatRoomDTO;
+import com.example.diploma.dto.message.MessageDTO;
+import com.example.diploma.dto.message.UserDTO;
+import com.example.diploma.models.*;
+import com.example.diploma.repos.ChatRoomRepo;
+import com.example.diploma.repos.MessageRepo;
 import com.example.diploma.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -19,6 +25,8 @@ import java.util.Set;
 public class UserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final MessageRepo messageRepo;
+    private final ChatRoomRepo chatRoomRepo;
 
     public boolean createUser (User user)
     {
@@ -26,6 +34,7 @@ public class UserService {
         user.setActive(false);
         user.getRoles().add(Roles.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(Status.OFFLINE);
         userRepo.save(user);
         return true;
     }
@@ -35,6 +44,7 @@ public class UserService {
         user.setActive(true);
         user.getRoles().add(Roles.SUPPLIER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(Status.OFFLINE);
         userRepo.save(user);
         return true;
     }
@@ -101,4 +111,180 @@ public class UserService {
         userRepo.save(customer);
     }
 
+
+    public UserDTO changeStatusOnline(User userDetails) {
+        User user = userRepo.findByLogin(userDetails.getLogin());
+        UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(user.getLogin());
+
+        userDTO.setRole(user.getRoles().toString());
+
+        List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(user, MessageStatus.DELIVERED);
+        Set<ChatRoom> chatRoomId = new HashSet<>();
+        for(Message chatMsg: chatMessage) {
+            chatRoomId.add(chatMsg.getChatRoom());
+        }
+        for (ChatRoom chatRoom : chatRoomId){
+            ChatRoom chatRoomDB = chatRoomRepo.findById(chatRoom.getIdChatRoom()).orElse(null);
+            if (chatRoomDB!=null) {
+                ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+                chatRoomDTO.setIdChatRoom(chatRoomDB.getIdChatRoom());
+                chatRoomDTO.setLoginUserSender(chatRoomDB.getSender().getLogin());
+                chatRoomDTO.setLoginUserRecipient(chatRoomDB.getRecipient().getLogin());
+                List<Message> chatMessageDB = messageRepo.findByChatRoom(chatRoomDB);
+                if (chatMessageDB!=null){
+                    for (Message msg : chatMessageDB) {
+                        chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
+                                chatRoomDTO.getLoginUserSender(),
+                                msg.getContent(), msg.getTimestamp(),
+                                msg.getStatus().toString()));
+                    }
+                }
+                userDTO.setChatRoomDTOS(chatRoomDTO);
+            }
+        }
+        user.setStatus(Status.ONLINE);
+        userRepo.save(user);
+        return userDTO;
+    }
+    public User changeStatusOffline(User userDetails) {
+        User account = userRepo.findByLogin(userDetails.getLogin());
+        account.setStatus(Status.OFFLINE);
+        return userRepo.save(account);
+    }
+
+    public List<UserDTO> findConnectedUsers() {
+        List<User> accounts = userRepo.findByStatus(Status.ONLINE);
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (User account: accounts) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setLogin(account.getLogin());
+
+            userDTO.setRole(account.getRoles().toString());
+
+            List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(account, MessageStatus.DELIVERED);
+            Set<ChatRoom> chatRoomId = new HashSet<>();
+            for (Message chatMsg : chatMessage) {
+                chatRoomId.add(chatMsg.getChatRoom());
+            }
+            for (ChatRoom chatRoom : chatRoomId) {
+                ChatRoom chatRoomDB = chatRoomRepo.findById(chatRoom.getIdChatRoom()).orElse(null);
+                if (chatRoomDB != null) {
+                    ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+                    chatRoomDTO.setIdChatRoom(chatRoomDB.getIdChatRoom());
+                    chatRoomDTO.setLoginUserSender(chatRoomDB.getSender().getLogin());
+                    chatRoomDTO.setLoginUserRecipient(chatRoomDB.getRecipient().getLogin());
+                    List<Message> chatMessageDB = messageRepo.findByChatRoom(chatRoomDB);
+                    if (chatMessageDB != null) {
+                        for (Message msg : chatMessageDB) {
+                            chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
+                                    chatRoomDTO.getLoginUserSender(),
+                                    msg.getContent(), msg.getTimestamp(),
+                                    msg.getStatus().toString()));
+                        }
+                    }
+                    userDTO.setChatRoomDTOS(chatRoomDTO);
+                }
+            }
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
+    }
+
+    public List<UserDTO> findOfflineUsers() {
+        List<User> accounts = userRepo.findByStatus(Status.OFFLINE);
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for (User account: accounts) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setLogin(account.getLogin());
+
+            userDTO.setRole(account.getRoles().toString());
+
+            List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(account, MessageStatus.DELIVERED);
+            Set<ChatRoom> chatRoomId = new HashSet<>();
+            for (Message chatMsg : chatMessage) {
+                chatRoomId.add(chatMsg.getChatRoom());
+            }
+            for (ChatRoom chatRoom : chatRoomId) {
+                ChatRoom chatRoomDB = chatRoomRepo.findById(chatRoom.getIdChatRoom()).orElse(null);
+                if (chatRoomDB != null) {
+                    ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+                    chatRoomDTO.setIdChatRoom(chatRoomDB.getIdChatRoom());
+                    chatRoomDTO.setLoginUserSender(chatRoomDB.getSender().getLogin());
+                    chatRoomDTO.setLoginUserRecipient(chatRoomDB.getRecipient().getLogin());
+                    List<Message> chatMessageDB = messageRepo.findByChatRoom(chatRoomDB);
+                    if (chatMessageDB != null) {
+                        for (Message msg : chatMessageDB) {
+                            chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
+                                    chatRoomDTO.getLoginUserSender(),
+                                    msg.getContent(), msg.getTimestamp(),
+                                    msg.getStatus().toString()));
+                        }
+                    }
+                    userDTO.setChatRoomDTOS(chatRoomDTO);
+                }
+            }
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
+    }
+
+    public List<User> findUserWhoNotRead(int id) {
+        User user = userRepo.getById(id);
+        List<User> userList = new ArrayList<>();
+        List<ChatRoom> listChat = chatRoomRepo.findBySenderOrRecipient(user,user);
+        for (ChatRoom chat:listChat){
+            List<Message> message = messageRepo.findByChatRoomAndSenderId(chat,
+                    user.equals(chat.getSender())? chat.getRecipient() : chat.getSender());
+            if(message.stream().map(Message::getStatus)
+                    .filter(MessageStatus.DELIVERED::equals).count()>0){
+                userList.add(userRepo.getById(user.equals(chat.getSender())? chat.getRecipient().getIdUser() : chat.getSender().getIdUser()));
+
+            }
+        }
+        return userList;
+    }
+
+    public void disconnect(User user) {
+        user.setStatus(Status.OFFLINE);
+        userRepo.save(user);
+    }
+
+    public UserDTO getAuthUser(String login) {
+        User account = userRepo.findByLogin(login);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setLogin(account.getLogin());
+        userDTO.setRole(account.getRoles().toString());
+
+        List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(account, MessageStatus.DELIVERED);
+        Set<ChatRoom> chatRoomId = new HashSet<>();
+        for(Message chatMsg: chatMessage) {
+            chatRoomId.add(chatMsg.getChatRoom());
+        }
+        for (ChatRoom chatRoom : chatRoomId){
+            ChatRoom chatRoomDB = chatRoomRepo.findById(chatRoom.getIdChatRoom()).orElse(null);
+            if (chatRoomDB!=null) {
+                ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+                chatRoomDTO.setIdChatRoom(chatRoomDB.getIdChatRoom());
+                chatRoomDTO.setLoginUserSender(chatRoomDB.getSender().getLogin());
+                chatRoomDTO.setLoginUserRecipient(chatRoomDB.getRecipient().getLogin());
+                List<Message> chatMessageDB = messageRepo.findByChatRoom(chatRoomDB);
+                if (chatMessageDB!=null){
+                    for (Message msg : chatMessageDB) {
+                        chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
+                                chatRoomDTO.getLoginUserSender(),
+                                msg.getContent(), msg.getTimestamp(),
+                                msg.getStatus().toString()));
+                    }
+                }
+                userDTO.setChatRoomDTOS(chatRoomDTO);
+            }
+        }
+        account.setStatus(Status.ONLINE);
+        userRepo.save(account);
+        return userDTO;
+    }
 }
+
+
+

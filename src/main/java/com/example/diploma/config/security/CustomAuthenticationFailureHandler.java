@@ -1,4 +1,4 @@
-package com.example.diploma.config;
+package com.example.diploma.config.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;

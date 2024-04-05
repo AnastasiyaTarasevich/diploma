@@ -2,7 +2,6 @@ package com.example.diploma.models;
 
 
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,7 +17,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private User sender;
+    private User senderId;
 
    @ManyToOne
     private User recipient;
@@ -31,5 +30,7 @@ public class Message {
     @Column
     @Enumerated(EnumType.STRING)
     private MessageStatus status;
+
+
 
 }

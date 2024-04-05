@@ -1,7 +1,7 @@
 package com.example.diploma.controllers;
 
 
-import com.example.diploma.config.WordGenerator;
+import com.example.diploma.config.word.WordGenerator;
 import com.example.diploma.models.*;
 import com.example.diploma.repos.*;
 import com.example.diploma.services.*;
