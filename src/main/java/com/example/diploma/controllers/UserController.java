@@ -374,8 +374,6 @@ String getSuccesDefect()
 
         if (supplier != null) {
 
-
-            double baseRating = 3.0;
             // Вычислить оценку поставщика с использованием заданных весов
             double defectsWeight = 0.5;
             double reviewsWeight = 0.2;

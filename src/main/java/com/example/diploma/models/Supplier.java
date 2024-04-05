@@ -76,7 +76,8 @@ public class Supplier {
         double totalRating = 0.0;
         int count = 0;
         for (SupplierReview review : reviews) {
-            if (review.getSupplier().equals(this)) {
+            Supplier supplier = review.getSupplier();
+            if (supplier != null && supplier.equals(this)) {
                 totalRating += review.getGrade();
                 count++;
             }

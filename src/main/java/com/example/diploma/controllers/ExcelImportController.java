@@ -12,10 +12,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +32,8 @@ public class ExcelImportController {
     private final SupplierReviewRepo supplierReviewRepo;
 
     @PostMapping("/importReviews")
-    public String importReviews(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> importReviews(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+
         supplierReviewRepo.deleteAll();
         try (InputStream inputStream = file.getInputStream()) {
             Workbook workbook = new XSSFWorkbook(inputStream);
@@ -55,10 +59,13 @@ public class ExcelImportController {
 
             }
 
-            return "Отзывы успешно импортированы.";
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", "/rate")
+                    .body("Отзывы успешно импортированы.");
         } catch (IOException e) {
             e.printStackTrace();
-            return "Ошибка при импорте отзывов.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Ошибка при импорте отзывов.");
         }
     }
 }
