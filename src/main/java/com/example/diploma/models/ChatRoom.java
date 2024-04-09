@@ -12,7 +12,10 @@ import java.util.List;
 @Builder
 @Entity
 public class ChatRoom {
+
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
     private String idChatRoom;
     @ManyToOne(fetch = FetchType.EAGER)
     private User sender;
@@ -20,5 +23,6 @@ public class ChatRoom {
     private User recipient;
     @OneToMany
     private List<Message> chatMessageList;
+
 
 }

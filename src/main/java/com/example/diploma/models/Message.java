@@ -19,8 +19,8 @@ public class Message {
     @ManyToOne
     private User senderId;
 
-   @ManyToOne
-    private User recipient;
+//   @ManyToOne
+//    private User recipient;
     @ManyToOne
     private ChatRoom chatRoom;
     @Column

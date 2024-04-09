@@ -118,6 +118,8 @@ public class UserService {
         userDTO.setLogin(user.getLogin());
 
         userDTO.setRole(user.getRoles().toString());
+        userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
 
         List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(user, MessageStatus.DELIVERED);
         Set<ChatRoom> chatRoomId = new HashSet<>();
@@ -136,6 +138,7 @@ public class UserService {
                     for (Message msg : chatMessageDB) {
                         chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
                                 chatRoomDTO.getLoginUserSender(),
+                                msg.getSenderId().getSurname() + " " + msg.getSenderId().getName(),
                                 msg.getContent(), msg.getTimestamp(),
                                 msg.getStatus().toString()));
                     }
@@ -161,7 +164,8 @@ public class UserService {
             userDTO.setLogin(account.getLogin());
 
             userDTO.setRole(account.getRoles().toString());
-
+            userDTO.setName(account.getName());
+            userDTO.setSurname(account.getSurname());
             List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(account, MessageStatus.DELIVERED);
             Set<ChatRoom> chatRoomId = new HashSet<>();
             for (Message chatMsg : chatMessage) {
@@ -179,6 +183,7 @@ public class UserService {
                         for (Message msg : chatMessageDB) {
                             chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
                                     chatRoomDTO.getLoginUserSender(),
+                                    msg.getSenderId().getSurname() + " " + msg.getSenderId().getName(),
                                     msg.getContent(), msg.getTimestamp(),
                                     msg.getStatus().toString()));
                         }
@@ -199,7 +204,8 @@ public class UserService {
             userDTO.setLogin(account.getLogin());
 
             userDTO.setRole(account.getRoles().toString());
-
+            userDTO.setName(account.getName());
+            userDTO.setSurname(account.getSurname());
             List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(account, MessageStatus.DELIVERED);
             Set<ChatRoom> chatRoomId = new HashSet<>();
             for (Message chatMsg : chatMessage) {
@@ -217,6 +223,7 @@ public class UserService {
                         for (Message msg : chatMessageDB) {
                             chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
                                     chatRoomDTO.getLoginUserSender(),
+                                    msg.getSenderId().getSurname() + " " + msg.getSenderId().getName(),
                                     msg.getContent(), msg.getTimestamp(),
                                     msg.getStatus().toString()));
                         }
@@ -255,7 +262,8 @@ public class UserService {
         UserDTO userDTO = new UserDTO();
         userDTO.setLogin(account.getLogin());
         userDTO.setRole(account.getRoles().toString());
-
+        userDTO.setName(account.getName());
+        userDTO.setSurname(account.getSurname());
         List<Message> chatMessage = messageRepo.findAllBySenderIdAndStatus(account, MessageStatus.DELIVERED);
         Set<ChatRoom> chatRoomId = new HashSet<>();
         for(Message chatMsg: chatMessage) {
@@ -273,6 +281,7 @@ public class UserService {
                     for (Message msg : chatMessageDB) {
                         chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
                                 chatRoomDTO.getLoginUserSender(),
+                                msg.getSenderId().getSurname() + " " + msg.getSenderId().getName(),
                                 msg.getContent(), msg.getTimestamp(),
                                 msg.getStatus().toString()));
                     }
@@ -284,6 +293,18 @@ public class UserService {
         userRepo.save(account);
         return userDTO;
     }
+    public void changeStatusOnline(String login) {
+        User account = userRepo.findByLogin(login);
+        account.setStatus(Status.ONLINE);
+        userRepo.save(account);
+    }
+    public void changeStatusOffline(String login) {
+        User account = userRepo.findByLogin(login);
+        account.setStatus(Status.OFFLINE);
+        userRepo.save(account);
+    }
+
+
 }
 
 

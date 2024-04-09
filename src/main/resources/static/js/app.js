@@ -188,7 +188,8 @@ async function fetchAndDisplayUserChat() {
 function displayMessage(senderId, content) {
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
-    if (senderId === ( User.login)) {
+    console.log(User.surname+" "+User.name);
+    if (senderId === (User.surname + " " + User.name)) {
         messageContainer.classList.add('sender');
     } else {
         messageContainer.classList.add('receiver');
@@ -206,6 +207,7 @@ function sendMessage(event) {
         const chatMessage = {
             idChatRoom: selectUserLogin + " " + login,
             senderLogin: User.login,
+            name: (User.surname + " " + User.name),
             content: messageContent,
             timestamp: new Date(),
             status: ""
@@ -213,7 +215,7 @@ function sendMessage(event) {
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
 
         // Обновление отображения чата с новым сообщением
-        displayMessage(User.login + " " + User.name, messageContent);
+        displayMessage(User.surname + " " + User.name, messageContent);
 
         messageInput.value = '';
     }
@@ -235,5 +237,5 @@ function onLogout() {
 }
 
 messageForm.addEventListener('submit', sendMessage, true);
-logout.addEventListener('click', onLogout, true);
-window.onbeforeunload = () => onLogout();
+// logout.addEventListener('click', onLogout, true);
+// window.onbeforeunload = () => onLogout();

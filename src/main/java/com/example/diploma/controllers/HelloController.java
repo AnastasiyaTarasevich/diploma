@@ -1,12 +1,18 @@
 package com.example.diploma.controllers;
 
 
+import com.example.diploma.models.Roles;
 import com.example.diploma.models.User;
 import com.example.diploma.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Collection;
 
 @Controller
 @RequiredArgsConstructor
@@ -78,7 +85,7 @@ public class HelloController {
     public String getUser(Model model, @AuthenticationPrincipal User user,HttpSession session)
     {
         String username = user.getUsername();
-
+        userService.changeStatusOnline(username);
         // Сохранение ника пользователя в сессии
         session.setAttribute("username", username);
         model.addAttribute("username", username);
@@ -97,7 +104,7 @@ public class HelloController {
     {
         model.addAttribute("login",user.getUsername());
         String username = user.getUsername();
-
+        userService.changeStatusOnline(username);
         // Сохранение ника пользователя в сессии
         session.setAttribute("username", username);
         model.addAttribute("username", username);
@@ -132,7 +139,38 @@ public class HelloController {
             model.addAttribute("usernameError", "Пользователь существует!");
             return "auth";
         }
-        else return "redirect:/main";
+        else return "redirect:/";
 
     }
+    @GetMapping("/openChat")
+    public String getChat(Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        String userRole = "";
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            userRole = userDetails.getAuthorities().toString(); // Получаем список ролей пользователя
+        }
+
+        model.addAttribute("login", login);
+        model.addAttribute("userRole",userRole);
+        return "chat";
+    }
+    @PostMapping("/CustomLogout")
+    public String logout() {
+        // Получаем имя пользователя из контекста безопасности
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Вызываем сервис для изменения статуса пользователя на "офлайн"
+        userService.changeStatusOffline(username);
+
+        // Очищаем контекст безопасности
+        SecurityContextHolder.clearContext();
+
+        // Редирект на главную страницу или другую страницу после выхода
+        return "redirect:/"; // Например, перенаправление на главную страницу
+    }
+
+
 }

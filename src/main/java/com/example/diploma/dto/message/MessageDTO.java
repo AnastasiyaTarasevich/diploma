@@ -15,6 +15,7 @@ import java.util.Date;
 public class MessageDTO {
     private String idChatRoom;
     private String senderLogin;
+    private String name;
     private String content;
     private Date timestamp;
     private String status;

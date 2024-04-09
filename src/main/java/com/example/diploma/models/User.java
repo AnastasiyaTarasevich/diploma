@@ -1,5 +1,6 @@
 package com.example.diploma.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -36,7 +38,9 @@ public class User implements UserDetails {
     @Basic
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
-
+    private String name;
+    private String surname;
+    private String phone;
 @Enumerated(EnumType.STRING)
 private Status status;
 
@@ -46,7 +50,7 @@ private Status status;
     private Set<Roles> roles = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Product> productList;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<Order> orders;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

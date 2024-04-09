@@ -25,7 +25,7 @@
         <tr>
             <td th:text="${supplier.companyName}"></td>
             <td th:text="${supplier.address}"></td>
-            <td th:text="${supplier.contactData}"></td>
+            <td th:text="${supplier.getContactData()}"></td>
             <td th:text="${supplier.rating}"></td>
             <td><a th:href="'/supplierEdit/'+${supplier.idsupplier}" class="btn btn-dark">Изменить</a></td>
            <td> <form th:action="'/supplierDelete/'+${supplier.idsupplier}" method="post">

@@ -7,7 +7,7 @@
 <br>
 <div align="center">
     <form class="well form-horizontal" action="/supplierAdd "  method="post"  enctype="multipart/form-data" id="form">
-        <label class="col-md-4 control-label">Название</label>
+        <label class="col-md-4 control-label">Название компании</label>
         <div class="col-md-4 inputGroupContainer">
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -28,16 +28,35 @@
 
         <br>
         <div class="form-group">
-            <label class="col-md-4 control-label" >Контактная информация</label>
+            <label class="col-md-4 control-label" >Фамилия контактного лица</label>
             <div class="col-md-4 inputGroupContainer">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <input name="contactData" placeholder="Контактное лицо" class="form-control"  type="text" >
+                    <input name="surname" placeholder="Контактное лицо" class="form-control"  type="text" >
                 </div>
             </div>
         </div>
         <br>
-
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Имя контактного лица</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="name" placeholder="Контактное лицо" class="form-control"  type="text" >
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group">
+            <label class="col-md-4 control-label" >Телефон контактного лица</label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <input name="phone" placeholder="Контактное лицо" class="form-control"  type="text" >
+                </div>
+            </div>
+        </div>
+        <br>
         <div class="form-group">
             <label class="col-md-4 control-label">e-mail</label>
             <div class="col-md-4 inputGroupContainer">

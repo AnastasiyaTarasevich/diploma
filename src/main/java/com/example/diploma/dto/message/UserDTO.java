@@ -13,6 +13,8 @@ import java.util.List;
 public class UserDTO {
     private String login;
     private String Role;
+    private String name;
+    private String surname;
     private List<ChatRoomDTO>chatRoomDTOS=new ArrayList<>();
     public void setChatRoomDTOS(ChatRoomDTO chatRoomDTO)
     {

@@ -36,10 +36,10 @@ public class SupplierService {
         {
             supplier.setAddress(updatedSupplier.getAddress());
         }
-        if (supplier.getContactData()!=updatedSupplier.getContactData())
-        {
-            supplier.setContactData(updatedSupplier.getContactData());
-        }
+//        if (supplier.getContactData()!=updatedSupplier.getContactData())
+//        {
+//            supplier.setContactData(updatedSupplier.getContactData());
+//        }
         supplierRepo.save(supplier);
     }
     public void deleteSupplier(int supplierId) {

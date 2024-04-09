@@ -5,6 +5,7 @@ import com.example.diploma.config.security.CustomAuthenticationFailureHandler;
 import com.example.diploma.config.security.CustomAuthenticationSuccessHandler;
 import com.example.diploma.services.UsersDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,11 +23,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UsersDetailsServiceImpl userDetailsService;
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http .csrf().disable()
                 .authorizeRequests()
-                .antMatchers( "/", "/about/**", "/auth", "/missingPassword","/about_us","/our_contacts","/for_customer","/for_supplier").permitAll()
+                .antMatchers( "/", "/about/**", "/auth", "/missingPassword","/about_us","/our_contacts","/for_customer","/for_supplier","/openChat/logout").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .antMatchers("/supplier/**").hasAuthority("SUPPLIER")
@@ -35,11 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/mylogin").successHandler(successHandler())
                 .failureHandler(failureHandler())
-                .permitAll()
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
                 .permitAll();
+//                .and()
+//                .logout()
+//                .permitAll();
     }
 
 

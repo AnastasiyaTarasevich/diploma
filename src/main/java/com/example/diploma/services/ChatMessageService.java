@@ -19,6 +19,7 @@ public class ChatMessageService {
     private final MessageRepo messageRepository;
     private final ChatRoomRepo chatRoomRepository;
     private final UserRepo userRepository;
+    private final ChatRoomService chatRoomService;
     public Message save(Message chatMessage) {
         chatMessage.setStatus(MessageStatus.DELIVERED);
         return messageRepository.save(chatMessage);
@@ -28,6 +29,7 @@ public class ChatMessageService {
         Message message = new Message();
         message.setStatus(MessageStatus.DELIVERED);
        User account = userRepository.findByLogin(messageDTO.getSenderLogin());
+
         User accountRep = new User();
         String[] words = messageDTO.getIdChatRoom().split(" ");
         for (String word : words) {
@@ -35,12 +37,19 @@ public class ChatMessageService {
                 accountRep = userRepository.findByLogin(word);
             }
         }
+//        ChatRoom chatRoom = chatRoomRepository.findBySenderAndRecipient(account,recipient).orElse(null);
+//        if (chatRoom == null) {
+//            chatRoomService.createChatId(account,recipient);
+//
+//        }
+//        chatRoom = chatRoomRepository.findBySenderAndRecipient(account,recipient).orElse(null);
         ChatRoom chatRoom = chatRoomRepository.findById(words[0] + " " + words[1]).orElse(null);
         if (chatRoom == null) {
             chatRoom = chatRoomRepository.findById(words[1] + " " + words[0]).orElse(null);
         }
         message.setChatRoom(chatRoom);
         message.setSenderId(account);
+
         message.setContent(messageDTO.getContent());
         message.setTimestamp(messageDTO.getTimestamp());
         return messageRepository.save(message);

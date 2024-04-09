@@ -51,7 +51,8 @@ body {
     border-right: 1px solid #ccc;
     padding: 20px;
     box-sizing: border-box;
-    background-color: #3498db;
+    background-color: black;
+
     color: #fff;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;

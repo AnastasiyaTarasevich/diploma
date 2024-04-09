@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +27,13 @@ public class ChatRoomService {
         User sender = userRepository.findByLogin(senderLogin);
         User recipient = userRepository.findByLogin(recipientLogin);
         if (sender==null && recipient==null) return null;
-        String chatId = senderLogin + " " + recipientLogin;
+        String chatId = senderLogin + " " + recipientLogin;;
         ChatRoom chatRoom = chatRoomRepository.findById(chatId).orElse(null);
+
+//            if (chatRoom==null) {
+//             createChatId(sender,recipient);
+//            }
+//        chatRoom = chatRoomRepository.findById(chatId).orElse(null);
         if (chatRoom==null){
             chatId = recipientLogin + " " + senderLogin;
             chatRoom = chatRoomRepository.findById(chatId).orElse(null);
@@ -39,6 +45,7 @@ public class ChatRoomService {
                 chatRoom = chatRoomRepository.save(chatRoom);
             }
         }
+
         ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
         chatRoomDTO.setIdChatRoom(chatRoom.getIdChatRoom());
         chatRoomDTO.setLoginUserSender(chatRoom.getSender().getLogin());
@@ -48,6 +55,7 @@ public class ChatRoomService {
             for (Message msg : messageList) {
                 chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
                         chatRoomDTO.getLoginUserSender(),
+                        msg.getSenderId().getSurname() + " " + msg.getSenderId().getName(),
                         msg.getContent(), msg.getTimestamp(),
                         msg.getStatus().toString()));
                 msg.setStatus(MessageStatus.RECEIVED);
@@ -74,6 +82,7 @@ public class ChatRoomService {
             for (Message msg : messageList) {
                 chatRoomDTO.setMessageDTO(new MessageDTO(chatRoom.getIdChatRoom(),
                         chatRoomDTO.getLoginUserSender(),
+                        msg.getSenderId().getSurname() + " " + msg.getSenderId().getName(),
                         msg.getContent(), msg.getTimestamp(),
                         msg.getStatus().toString()));
             }
@@ -81,4 +90,19 @@ public class ChatRoomService {
         }
         return chatRoomDTOList;
     }
+//    public void  createChatId(User senderId, User recipientId) {
+//        var chatId=String.format("%s %s", senderId.getLogin(),recipientId.getLogin());
+//        ChatRoom senderRecipient =ChatRoom.builder()
+//                .idChatRoom(chatId)
+//                .sender(senderId)
+//                .recipient(recipientId)
+//                .build();
+//        ChatRoom recipientSender =ChatRoom.builder()
+//                .idChatRoom(chatId)
+//                .sender(recipientId)
+//                .recipient(senderId)
+//                .build();
+//        chatRoomRepository.save(senderRecipient);
+//        chatRoomRepository.save(recipientSender);
+//    }
 }

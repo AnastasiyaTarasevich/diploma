@@ -99,17 +99,19 @@ public class AdminController {
         return "supplierAdd";
     }
     @PostMapping ("/supplierAdd")
-    public String AddSuppliertoDB(Model model, @RequestParam("companyName") String companyName, @RequestParam("address") String address,@RequestParam("contactData") String contactData, @RequestParam("e-mail") String email) throws MessagingException, UnsupportedEncodingException {
+    public String AddSuppliertoDB(Model model, @RequestParam("companyName") String companyName, @RequestParam("address") String address,@RequestParam("name") String name,@RequestParam("surname") String surname,
+                                  @RequestParam("phone") String phone,
+                                  @RequestParam("e-mail") String email) throws MessagingException, UnsupportedEncodingException {
         String login=randomGenerator.generateLogin();
         String password =randomGenerator.generatePassword();
         if (userRepo.existsByLogin(login)) {
             model.addAttribute("usernameError", "Пользователь с таким логином уже существует!");
             return "supplierAdd";
         }
-        if (!isValidContactData(contactData)) {
-            model.addAttribute("contactDataError", "Некорректный формат контактной информации! Введите фамилию, имя и номер телефона через пробел.");
-            return "supplierAdd";
-        }
+//        if (!isValidContactData(contactData)) {
+//            model.addAttribute("contactDataError", "Некорректный формат контактной информации! Введите фамилию, имя и номер телефона через пробел.");
+//            return "supplierAdd";
+//        }
         // Проверка существующей почты
         if (userRepo.existsByEmail(email)) {
             model.addAttribute("emailError", "Пользователь с такой почтой уже существует!");
@@ -122,21 +124,24 @@ public class AdminController {
         user.setLogin(login);
         user.setPassword(password);
         user.setEmail(email);
+       user.setName(name);
+       user.setSurname(surname);
+       user.setPhone(phone);
         userService.createSupplier(user);
 
         Supplier supplier=new Supplier();
           supplier.setCompanyName(companyName);
           supplier.setAddress(address);
-          supplier.setContactData(contactData);
+          supplier.setContactData(user.getName()+" "+user.getSurname()+" "+user.getPhone());
         supplier.setIdUser(user.getIdUser());
 
        supplierRepo.save(supplier);
         return "redirect:/suppliers_list";
     }
-    private boolean isValidContactData(String contactData) {
-        String regex = "^[А-Яа-я]+ [А-Яа-я]+ \\+\\d{1,3}\\d{9}$";
-        return contactData.matches(regex);
-    }
+//    private boolean isValidContactData(String contactData) {
+//        String regex = "^[А-Яа-я]+ [А-Яа-я]+ \\+\\d{1,3}\\d{9}$";
+//        return contactData.matches(regex);
+//    }
     @GetMapping("/supplierEdit/{id}")
     public String suppEditForm(Model model, @PathVariable int id)
     {
@@ -145,6 +150,9 @@ public class AdminController {
         model.addAttribute("supplier",supplier);
         return "supplierEdit";
     }
+
+
+    ////TO DO
     @PostMapping("/supplierEdit")
     public String EditSupplier(@RequestParam("companyName") String companyName,
                                @RequestParam("address") String address,
@@ -152,7 +160,7 @@ public class AdminController {
                                @RequestParam("idsupplier") int idsupplier)
     {
         Supplier updatedSupplier=new Supplier();
-        updatedSupplier.setContactData(contactData);
+
         updatedSupplier.setCompanyName(companyName);
         updatedSupplier.setAddress(address);
         supplierService.updateSupplier(idsupplier,updatedSupplier);
