@@ -6,6 +6,7 @@ import com.example.diploma.repos.*;
 import com.example.diploma.services.OrderService;
 import com.example.diploma.services.ProductService;
 import com.example.diploma.services.SupplierService;
+import com.example.diploma.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,6 +41,7 @@ public class UserController
     private final SupplierReviewRepo supplierReviewRepo;
     private final ShipmentFailersRepo shipmentFailersRepo;
     private final SupplierDefectRepo supplierDefectRepo;
+    private final UserService userService;
     @GetMapping("/supplier_reading")
     public String readSupplier(Model model)
     {
@@ -393,5 +395,24 @@ String getSuccesDefect()
 
         return "error";
     }
+    @GetMapping("/userProfile_update")
+    public String getEdiProfileForm(Model model, @AuthenticationPrincipal User user)
+    {
+        model.addAttribute("username",user.getLogin());
 
+        model.addAttribute("email",user.getEmail());
+        return "/userProfile_update";
+    }
+
+    @PostMapping("/userProfile_update")
+    public String updateProfileInfo(
+            @AuthenticationPrincipal User user,
+            @RequestParam String password,
+            @RequestParam String email,
+            @RequestParam String username
+    )
+    {
+        userService.updateProfile(user, password, email, username);
+        return "redirect:/user/";
+    }
 }
