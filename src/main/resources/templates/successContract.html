@@ -7,12 +7,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<div th:insert="blocks/supplier_nav::div"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 p-0">
+      <div th:insert="blocks/supplier_nav::div"></div>
+    </div>
+    <div class="col-md-7">
+      <br>
+      <br>
 <div id="container">
 
   <div class="container text-center mt-5">
     <h2>Вы создали новый контракт, он будет отправлен покупателю</h2>
     <a th:href="'/downloadContract/'+${contractId}">Скачать контракт</a>
+  </div>
+</div>
+    </div>
   </div>
 </div>
 </body>

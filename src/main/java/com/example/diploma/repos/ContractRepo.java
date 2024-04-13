@@ -15,4 +15,6 @@ public interface ContractRepo extends JpaRepository<Contract,Integer> {
     Contract getContractByOrderAndUser(Order order, User user);
 
     List<Contract> findContractByUser(User userFromDB);
+
+    Contract getContractByOrder(Order order);
 }

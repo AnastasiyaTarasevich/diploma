@@ -12,13 +12,21 @@
 <body>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-3 p-0"th:switch="${userRole}">
+    <div class="col-md-3 p-0" th:switch="${userRole}">
         <!-- Боковая панель для администратора -->
         <div th:case="'[USER]'">
-          <div th:insert="blocks/user_nav::div"></div></div>
+          <div th:insert="blocks/user_nav::div"></div>
+        </div>
         <div th:case="'[SUPPLIER]'">
-          <div th:insert="blocks/supplier_nav::div"></div>
-    </div>
+          <div th:insert="blocks/supplier_nav::div">
+
+          </div>
+        </div>
+      <div th:case="'[LOGISTICS]'">
+        <div th:insert="blocks/logist_nav::div">
+
+        </div>
+      </div>
     </div>
 
     <div class="col-md-7">

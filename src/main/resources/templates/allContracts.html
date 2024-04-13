@@ -3,7 +3,14 @@
 <head th:insert="blocks/head::head">
 </head>
 <body>
-<div th:insert="blocks/admin_nav::div"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 p-0">
+      <div th:insert="blocks/logist_nav::div"></div>
+    </div>
+    <div class="col-md-7">
+      <br>
+      <br>
 
 <div class="container">
   <table class="table">
@@ -47,6 +54,9 @@
     </tr>
     </tbody>
   </table>
+</div>
+    </div>
+  </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 

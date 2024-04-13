@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/logist_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <br><br>
+            <div class="container">
+                <input type="text" id="supplierFilter" placeholder="Фильтр поставщика...">
+                <br><br>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Заказ №</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Заказчик</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Поставщик</th>
+                        <th scope="col">Телефон заказчика</th>
+                        <th scope="col">Товары</th>
+                        <th scope="col">Действия над заказом</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="orderItems, rowStat : ${allOrders}">
+                    <tr>
+                        <th th:text="${orderItems.order.idorder}"></th>
+                        <th th:text="${orderItems.order.date}"></th>
+                        <th th:text="${orderItems.order.firstName + ' ' + orderItems.order.lastName}"></th>
+                        <th th:text="${orderItems.order.city + ', улица ' + orderItems.order.street + ', дом ' + orderItems.order.NHouse + (orderItems.order.corpus != null ? ', корпус ' + orderItems.order.corpus : '')}"></th>
+                        <th th:text="${orderItems.supplier.companyName}" id="supplierCompanyName"></th>
+                        <th th:text="${orderItems.order.phoneNumber}"></th>
+                        <th>
+                            <p>Название продукта: <span th:text="${orderItems.product.name}"></span></p>
+                            <p>Статус: <span class="order-status" th:text="${orderItems.status}"></span></p>
+                            <p>Цена: <span th:text="${orderItems.product.price}"></span></p>
+                            <p>Количество: <span th:text="${orderItems.quantity}"></span></p>
+                        </th>
+                        <th>
+                                            <form th:action="@{/viewContract}" method="get">
+                                                <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />
+                                                <button type="submit" class="btn btn-success accept-order" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Просмотреть контракт</button>
+                                            </form>
+
+
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#supplierFilter').on('input', function() {
+            var filterValue = $(this).val().toLowerCase();
+            console.log(filterValue)
+            $('table tbody tr').each(function() {
+                var supplierCompanyName = $('#supplierCompanyName').text().trim();
+                console.log('Название компании поставщика:', supplierCompanyName);
+                if (supplierCompanyName.includes(filterValue)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+    $(document).ready(function ()
+    {
+
+        var statuses = [];
+
+        $('.table tbody tr').each(function () {
+
+            var status = $(this).find('.order-status').text().trim();
+
+
+            if (status==='ОЖИДАЕТ_КОНТРАКТ')
+            {
+                $(this).find('.accept-order').show();
+            }
+
+
+            statuses.push(status);
+
+        });
+
+        console.log(statuses);
+    });
+
+</script>
+
+</body>
+
+</html>

@@ -22,7 +22,7 @@
             <th scope="col">Заказчик</th>
             <th scope="col">Адрес</th>
             <th scope="col">Товары</th>
-            <th scope="col">Действия над заказом</th>
+<!--            <th scope="col">Действия над заказом</th>-->
             <th scope="col"></th>
         </tr>
         </thead>
@@ -41,10 +41,10 @@
                 <p>Количество: <span th:text="${orderItems.quantity}"></span></p>
             </th>
             <th>
-                <form th:action="@{/viewContract}" method="get">
-                    <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />
-                    <button type="submit" class="btn btn-success accept-order" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Просмотреть контракт</button>
-                </form>
+<!--                <form th:action="@{/viewContract}" method="get">-->
+<!--                    <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />-->
+<!--                    <button type="submit" class="btn btn-success accept-order" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Просмотреть контракт</button>-->
+<!--                </form>-->
 
             </th>
         </tr>
