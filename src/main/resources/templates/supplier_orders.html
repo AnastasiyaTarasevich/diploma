@@ -52,47 +52,14 @@
                     <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />
                     <button type="submit" class="btn btn-danger notaccept-order" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Отклонить заказ</button>
                 </form>
-                <form th:action="@{/changeStatus}" method="post">
-                    <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />
-                    <button type="submit" class="btn btn-primary change-status" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Изменить статус</button>
-                </form>
+
             </th>
         </tr>
         </tbody>
     </table>
 </div>
 <script>
-    $(document).ready(function () {
-        var prevOrderId = null;
-        var statuses = [];
 
-        $('.table tbody tr').each(function () {
-            var currentOrderId = $(this).find('.accept-order').attr('data-orderid');
-            var status = $(this).find('.order-status').text().trim();
-
-            if (prevOrderId === null || prevOrderId !== currentOrderId) {
-                $(this).find('.accept-order').show();
-                $(this).find('.notaccept-order').show();
-                $(this).find('.change-status').hide(); // Скрыть кнопку "Изменить статус"
-                if (status!=='В_ОЖИДАНИИ')
-                {
-                    $(this).find('.accept-order').hide();
-                    $(this).find('.notaccept-order').hide();
-                    $(this).find('.change-status').show();
-                }
-                if(status==='ДОСТАВЛЕН')
-                {
-                        $(this).find('button.change-status').prop('disabled', true);
-                }
-            }
-
-            statuses.push(status);
-
-            prevOrderId = currentOrderId;
-        });
-
-        console.log(statuses);
-    });
 </script>
         </div>
     </div>

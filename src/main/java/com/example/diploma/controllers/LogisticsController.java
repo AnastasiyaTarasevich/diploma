@@ -1,10 +1,8 @@
 package com.example.diploma.controllers;
 
 import com.example.diploma.models.*;
-import com.example.diploma.repos.ContractRepo;
-import com.example.diploma.repos.OrderItemRepo;
-import com.example.diploma.repos.OrderRepo;
-import com.example.diploma.repos.PaymentRepo;
+import com.example.diploma.repos.*;
+import com.example.diploma.services.ShipmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +23,9 @@ public class LogisticsController {
     private final OrderRepo orderRepo;
     private final ContractRepo contractRepo;
     private final PaymentRepo paymentRepo;
+    private final ShipmentService shipmentService;
+    private final ShipmentRepo shipmentRepo;
+    private final ShipmentFailersRepo shipmentFailersRepo;
     @GetMapping("/all_orders")
     public String getAllOrders(@AuthenticationPrincipal User userSession, Model model) {
 
@@ -53,4 +56,76 @@ public class LogisticsController {
         paymentRepo.save(payment);
         return ResponseEntity.ok("Контракт успешно подписан и оплачен");
     }
+    @PostMapping("/changeStatus")
+    public String updateOrderItemStatus(@RequestParam("orderId") int id)
+    {
+        Order order = orderRepo.getById(id);
+        List<OrderItem> orderItems = order.getOrderItems();
+        List<OrderItem> orderItems1=new ArrayList<>();
+//        User userFromDB = userRepo.findByLogin(userSession.getUsername());
+//        Supplier supplier = supplierRepo.findByIdUser(userFromDB.getIdUser());
+        for (OrderItem orderItem : orderItems) {
+//            Supplier supplier1 = orderItem.getSupplier();
+//            if (supplier1.getIdsupplier() == supplier.getIdsupplier()) {
+                // Изменяем статус товара в соответствии с вашей логикой
+                orderItem.setStatus(updateItemStatus(orderItem.getStatus()));
+                orderItemRepo.save(orderItem);
+                if (orderItem.getStatus()==OrderStatus.ПЕРЕДАН_В_ДОСТАВКУ)
+                {
+                    orderItems1.add(orderItem);
+                }
+            }
+
+
+//        }
+        if (!orderItems1.isEmpty()) {
+            shipmentService.createShipmentForOrderItem(orderItems1);
+        }
+        return "redirect:/all_orders";
+    }
+    private OrderStatus updateItemStatus(OrderStatus currentStatus) {
+        switch (currentStatus) {
+            case ОЖИДАЕТ_КОНТРАКТ:
+                return OrderStatus.В_СБОРКЕ;
+            case В_СБОРКЕ:
+                return OrderStatus.ПЕРЕДАН_В_ДОСТАВКУ;
+            default:
+                return currentStatus;
+        }
+    }
+    @GetMapping("/list_shipments")
+    public String getSupplierShipments(@AuthenticationPrincipal User userSession, Model model) {
+
+        List<Shipment> shipments=shipmentRepo.findAll();
+        model.addAttribute("supplierShipments", shipments);
+        return "list_shipments";
+    }
+    @PostMapping("/changeShStatus")
+    public String changeStatusToDelivered(@RequestParam("shipmentId") int shipmentId) {
+        Shipment shipment=shipmentRepo.getById(shipmentId);
+        shipment.setStatus(ShipmentStatus.ДОСТАВЛЕНО);
+        shipment.setArrivalDate(new Date(System.currentTimeMillis()));
+        for (OrderItem orderItem : shipment.getOrderItems()) {
+            orderItem.setStatus(OrderStatus.ДОСТАВЛЕН);
+        }
+        shipmentRepo.save(shipment);
+        return "redirect:/list_shipments";
+    }
+
+    @PostMapping("/problemsWithDelivery")
+    public String delayShipment(@RequestParam("shipmentId") int shipmentId,@RequestParam("delay") int delay, @RequestParam("desc") String desc )
+    {
+        Shipment shipment=shipmentRepo.getById(shipmentId);
+        int t= shipment.getDeliveryDelay()+delay;
+        shipment.setDeliveryDelay(t);
+        shipment.setArrivalDate(shipment.calculateDeliveryDelayDate());
+        shipmentRepo.save(shipment);
+        ShipmentsFailures shipmentsFailures=new ShipmentsFailures();
+        shipmentsFailures.setShipment(shipment);
+        shipmentsFailures.setDescription("Задержка доставки на " + delay + " дней по причине:"+desc);
+        shipmentsFailures.setDate(new Date(System.currentTimeMillis()));
+        shipmentFailersRepo.save(shipmentsFailures);
+        return "redirect:/list_shipments";
+    }
+
 }
