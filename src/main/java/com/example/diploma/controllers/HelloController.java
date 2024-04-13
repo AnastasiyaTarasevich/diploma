@@ -92,6 +92,17 @@ public class HelloController {
         model.addAttribute("login",user.getUsername());
         return "user";
     }
+    @GetMapping("/logistics/")
+    public String getLogistics(Model model, @AuthenticationPrincipal User user,HttpSession session)
+    {
+        String username = user.getUsername();
+        userService.changeStatusOnline(username);
+        // Сохранение ника пользователя в сессии
+        session.setAttribute("username", username);
+        model.addAttribute("username", username);
+        model.addAttribute("login",user.getUsername());
+        return "logistics";
+    }
     @GetMapping("/admin/")
     public String getAdmin(Model model, @AuthenticationPrincipal User user)
     {

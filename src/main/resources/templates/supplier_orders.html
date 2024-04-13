@@ -21,8 +21,8 @@
         <thead>
         <tr>
             <th scope="col">Заказ №</th>
-            <th scope="col"> Статус</th>
-            <th scope="col">Дата</th>
+            <th scope="col"> Дата</th>
+            <th scope="col"> Дата поставки</th>
             <th scope="col">Заказчик</th>
             <th scope="col">Адрес</th>
             <th scope="col">Товары</th>
@@ -33,11 +33,10 @@
         <tbody th:each="orderItems, rowStat : ${supplierOrders}">
         <tr>
             <th th:text="${orderItems.order.idorder}"></th>
-<!--            <th th:text="${orderItems.order.status}"></th>-->
             <th th:text="${orderItems.order.date}"></th>
-            <th th:text="${orderItems.order.firstName + ' ' + orderItems.order.lastName}"></th>
+            <th th:text="${orderItems.order.date_for_sh}"></th>
+            <th th:text="${orderItems.order.firstName + ' ' + orderItems.order.lastName+' '+orderItems.order.phoneNumber}"></th>
             <th th:text="${orderItems.order.city + ', улица ' + orderItems.order.street + ', дом ' + orderItems.order.NHouse + (orderItems.order.corpus != null ? ', корпус ' + orderItems.order.corpus : '')}"></th>
-            <th th:text="${orderItems.order.phoneNumber}"></th>
             <th>
                 <p>Название продукта: <span th:text="${orderItems.product.name}"></span></p>
                 <p>Статус: <span class="order-status" th:text="${orderItems.status}"></span></p>

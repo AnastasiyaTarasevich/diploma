@@ -1,5 +1,6 @@
 package com.example.diploma.services;
 
+import com.example.diploma.models.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,6 +36,26 @@ public class MyMailSender {
                 + "<br>"
                 + "<p>Проигнорируйте сообщение, если "
                 + " не посылали этот запрос.</p>";
+
+        helper.setSubject(subject);
+
+        helper.setText(content, true);
+
+        javaMailSender.send(message);
+
+    }
+    public void sendOrderToSupplier(Order order,String recipientEmail) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(order.getUser().getEmail(), order.getUser().getName());
+        helper.setTo(recipientEmail);
+        String subject = "Поступление нового заказа";
+
+        String content = "<p>Вам поступил новый заказ в системе MySrm</p>"
+                + "<p>Заказчик:"+order.getLastName()+" "+order.getFirstName()+"</p>"
+                + "<p>Заказ от:"+order.getDate()+"</p>"
+        + "<p>Необходимая дата поставки:"+order.getDate_for_sh()+"</p>";
 
         helper.setSubject(subject);
 

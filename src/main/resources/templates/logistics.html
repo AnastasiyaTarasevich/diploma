@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head"></head>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/logist_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <h3 class="text-center mt-5">Привет, <span th:text="${login}"></span></h3>
+            <div style="flex-grow: 1;">
+                <img src="https://static.tildacdn.com/tild3335-6431-4364-b733-303662323436/_3.PNG" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+
+            </div>
+        </div>
+    </div>
+</div>
+</html>

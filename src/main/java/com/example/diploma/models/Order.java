@@ -8,9 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -90,5 +88,18 @@ public class Order {
 
     public void removeProduct(Product product) {
         orderItems.removeIf(orderItem -> orderItem.getProduct().equals(product));
+    }
+
+    public Set<Supplier> getUniqueSuppliers() {
+        Set<Supplier> uniqueSuppliers = new HashSet<>();
+
+        // Проходим по всем товарам заказа
+        for (OrderItem orderItem : orderItems) {
+            Supplier supplier = orderItem.getSupplier();
+            // Добавляем поставщика в Set (дубликаты автоматически игнорируются)
+            uniqueSuppliers.add(supplier);
+        }
+
+        return uniqueSuppliers;
     }
 }

@@ -3,10 +3,7 @@ package com.example.diploma.controllers;
 
 import com.example.diploma.models.*;
 import com.example.diploma.repos.*;
-import com.example.diploma.services.OrderService;
-import com.example.diploma.services.ProductService;
-import com.example.diploma.services.SupplierService;
-import com.example.diploma.services.UserService;
+import com.example.diploma.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,11 +11,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,6 +42,7 @@ public class UserController
     private final ShipmentFailersRepo shipmentFailersRepo;
     private final SupplierDefectRepo supplierDefectRepo;
     private final UserService userService;
+    private final MyMailSender myMailSender;
     @GetMapping("/supplier_reading")
     public String readSupplier(Model model)
     {
@@ -183,7 +184,7 @@ public class UserController
             @ModelAttribute Order order,
             Principal principal,
             Model model
-    ) {
+    ) throws MessagingException, UnsupportedEncodingException {
         // Создаем новый заказ
         Order newOrder = new Order();
         newOrder.setCity(order.getCity());
@@ -192,15 +193,18 @@ public class UserController
         newOrder.setCorpus(order.getCorpus());
         newOrder.setPriceOfOrder(order.getPriceOfOrder());
         newOrder.setTotalPrice(order.getTotalPrice());
-        newOrder.setFirstName(order.getFirstName());
-        newOrder.setLastName(order.getLastName());
+
         newOrder.setPhoneNumber(order.getPhoneNumber());
         newOrder.setDate_for_sh(order.getDate_for_sh());
         newOrder.setDate(LocalDate.now());
-//        newOrder.setStatus(OrderStatus.В_ОЖИДАНИИ); // Установите нужный статус заказа
+
 
         // Связываем заказ с пользователем
         User userFromDB = userRepo.findByLogin(principal.getName());
+        String name=userFromDB.getName();
+        String surname=userFromDB.getSurname();
+        newOrder.setFirstName(surname);
+        newOrder.setLastName(name);
         newOrder.setUser(userFromDB);
         for (String supplierName : supplierNames) {
             System.out.println("Supplier Name: " + supplierName);
@@ -225,13 +229,24 @@ public class UserController
 
 
                 newOrder.addProduct(product, quantity, supplier);
+
         }
-
-        // Сохраняем заказ в базе данных
-        orderService.addOrder(newOrder);
-
+        Order savedOrder = orderService.addOrder(newOrder);
         // Обновляем заказ в базе данных
         orderService.updateOrder(newOrder);
+
+        // Получаем список уникальных поставщиков из сохраненного заказа
+        Set<Supplier> uniqueSuppliers = savedOrder.getUniqueSuppliers();
+
+        // Отправляем сообщение каждому поставщику только один раз
+        for (Supplier supplier : uniqueSuppliers) {
+            int supplierIdUser = supplier.getIdUser();
+            User user=userRepo.getById(supplierIdUser);
+            myMailSender.sendOrderToSupplier(savedOrder, user.getEmail());
+        }
+
+
+
         return "redirect:/finalizeOrder";
     }
 
