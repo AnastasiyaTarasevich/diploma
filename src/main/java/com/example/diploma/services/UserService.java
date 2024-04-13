@@ -5,6 +5,7 @@ import com.example.diploma.dto.message.MessageDTO;
 import com.example.diploma.dto.message.UserDTO;
 import com.example.diploma.models.*;
 import com.example.diploma.repos.ChatRoomRepo;
+import com.example.diploma.repos.LogisticsRepo;
 import com.example.diploma.repos.MessageRepo;
 import com.example.diploma.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +28,31 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MessageRepo messageRepo;
     private final ChatRoomRepo chatRoomRepo;
+    private final LogisticsRepo logisticsRepo;
 
-    public boolean createUser (User user)
+    public boolean createUser (User user,String role)
     {
         if(userRepo.findByLogin(user.getLogin())!=null) return false;
         user.setActive(false);
-        user.getRoles().add(Roles.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(Status.OFFLINE);
-        userRepo.save(user);
+        if(role.equals("user"))
+        {
+            user.getRoles().add(Roles.USER);
+            userRepo.save(user);
+        }
+        else
+        {
+            user.getRoles().add(Roles.LOGISTICS);
+            Logistic logistic=new Logistic();
+            logistic.setUser(user);
+            userRepo.save(user);
+
+            logisticsRepo.save(logistic);
+        }
         return true;
+
+
     }
     public boolean createSupplier (User user)
     {

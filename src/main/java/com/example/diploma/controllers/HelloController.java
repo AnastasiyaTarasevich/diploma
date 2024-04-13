@@ -118,7 +118,7 @@ public class HelloController {
         return "auth";
     }
     @PostMapping("/auth")
-    public String addAuhorith(Model model, @Valid User user,
+    public String addAuhorith(Model model, @Valid User user, @RequestParam ("role") String role,
                               @RequestParam(name = "confirmPassword")String confirmPassword,
                               @RequestParam("g-recaptcha-response") String captchaResponse
     )
@@ -135,12 +135,19 @@ public class HelloController {
             model.addAttribute("passwError", "Пароли не совпадают");
             return "auth";
         }
-        else if(!userService.createUser(user)) {
+        else if(!userService.createUser(user,role)) {
             model.addAttribute("usernameError", "Пользователь существует!");
             return "auth";
         }
-        else return "redirect:/";
+        else return "redirect:/msgAfterReg";
 
+    }
+    @GetMapping("/msgAfterReg")
+    public String getMsg(Model model)
+    {
+
+        model.addAttribute("tittle","После регистрации");
+        return "msgAfterReg";
     }
     @GetMapping("/openChat")
     public String getChat(Model model){

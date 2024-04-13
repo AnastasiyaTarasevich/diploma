@@ -47,7 +47,13 @@
     }
 </style></head>
 
-<div th:insert="blocks/supplier_nav::div"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/supplier_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <br><br>
 
 <body>
 <div class="product-info" >
@@ -65,7 +71,9 @@
         <div class="product-details" th:text="'Описание товара: '+${product.description}"></div>
     </div>
 </div>
+
 </body>
-</html>
-</body>
+        </div>
+    </div>
+</div>
 </html>

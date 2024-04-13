@@ -9,7 +9,7 @@
 </head>
 <div th:insert="blocks/header::header"></div>
 <body>
-<div class="container">
+<div class="container overflow-auto">
 
     <form class="well form-horizontal" action="/auth " method="post"  modelAttribute="userForm" enctype="multipart/form-data">
         <fieldset>
@@ -17,6 +17,21 @@
             <!-- Form Name -->
             <legend style="text-align: center;"><h2><b>Регистрация</b></h2></legend><br>
             <div align="center">
+
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Роль в системе</label>
+                    <div class="col-md-4 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                            <select name="role" class="form-select" required>
+                                <option value="">Выберите роль...</option>
+                                <option value="user">Специалист отдела закупок</option>
+                                <option value="logistics">Логист</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <label class="col-md-4 control-label">Введите свое имя</label>
                 <br>
                 <div class="col-md-4 inputGroupContainer">
@@ -88,7 +103,17 @@
 
 
                 <br>
-
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Номер телефона</label>
+                    <br>
+                    <div class="col-md-4 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                            <input name="phone" placeholder="Phone" pattern="^\+\d{12}$" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <br>
                 <div class="g-recaptcha" data-sitekey="6LevH7MlAAAAACjRxJ0zs-yI-Z5a7CeOWYAF4VAb">
                 </div>
                 <div th:if="${captchaError}" class="alert-danger"   role="alert"><p class="text-danger" th:text="${captchaError}"></p></div>
@@ -111,11 +136,8 @@
     </form>
 </div>
 <br>
-<div th:insert="blocks/footer::footer"></div>
-<script>
 
+<div th:insert="blocks/footer::footer" style="margin-top: 100px"></div>
 
-
-</script>
 </body>
 </html>

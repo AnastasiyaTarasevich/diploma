@@ -41,8 +41,8 @@ public class User implements UserDetails {
     private String name;
     private String surname;
     private String phone;
-@Enumerated(EnumType.STRING)
-private Status status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -50,8 +50,9 @@ private Status status;
     private Set<Roles> roles = new HashSet<>();
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Product> productList;
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
@@ -86,9 +87,11 @@ private Status status;
     public boolean isEnabled() {
         return active;
     }
+
     public boolean isAdmin() {
         return roles.contains(Roles.ADMIN);
     }
+
     public void clearProductList() {
         productList.clear();
     }

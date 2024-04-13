@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -52,6 +54,18 @@ public class Order {
     @Basic
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "date_sh", nullable = false)
+    private LocalDate date_for_sh;
+
+    public LocalDate getDate_for_sh() {
+        return date_for_sh;
+    }
+
+    public void setDate_for_sh(LocalDate date_for_sh) {
+        this.date_for_sh = date_for_sh;
+    }
 
     @OrderColumn
     @ManyToMany( fetch = FetchType.EAGER)

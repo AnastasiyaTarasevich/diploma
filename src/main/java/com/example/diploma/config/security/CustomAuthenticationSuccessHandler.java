@@ -29,8 +29,11 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             } else if (grantedAuthority.getAuthority().equals("ADMIN")) {
                 return "/admin/";
             } else if (grantedAuthority.getAuthority().equals("SUPPLIER")) {
-            return "/supplier/";
-        }
+                return "/supplier/";
+            } else if (grantedAuthority.getAuthority().equals("LOGISTICS")) {
+                return "/logistics/";
+            }
+
         }
         return "/";
     }

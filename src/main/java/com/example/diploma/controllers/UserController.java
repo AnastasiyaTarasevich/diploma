@@ -195,6 +195,7 @@ public class UserController
         newOrder.setFirstName(order.getFirstName());
         newOrder.setLastName(order.getLastName());
         newOrder.setPhoneNumber(order.getPhoneNumber());
+        newOrder.setDate_for_sh(order.getDate_for_sh());
         newOrder.setDate(LocalDate.now());
 //        newOrder.setStatus(OrderStatus.В_ОЖИДАНИИ); // Установите нужный статус заказа
 

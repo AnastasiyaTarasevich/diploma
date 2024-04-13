@@ -7,12 +7,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<div th:insert="blocks/user_nav::div"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3 p-0">
+      <div th:insert="blocks/user_nav::div"></div>
+    </div>
+    <div class="col-md-7">
+      <br><br>
 <div id="container">
 
   <div class="container text-center mt-5">
     <h2>Спасибо за заказ!</h2>
     <p>Ваш номер заказа: <span th:text="${orderIndex}"></span></p>
+  </div>
+</div>
+    </div>
   </div>
 </div>
 </body>

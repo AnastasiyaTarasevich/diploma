@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Сообщение</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div th:insert="blocks/user_nav::div"></div>
 <h1 th:text="${message}"></h1>
+<p>Для перехода на главную страницу нажмите на стрелочку:</p>
+<a href="/" class="btn btn-primary">
+    <i class="fas fa-arrow-left"></i> На главную
+</a>
 </body>
 </html>
