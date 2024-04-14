@@ -7,6 +7,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+<style>
+    /* Цвета подсветки для разных статусов */
+    .status-waiting {
+        background-color: #f0ad4e; /* Цвет для статуса "В_ОЖИДАНИИ" */
+    }
+    .status-awaiting-contract {
+        background-color: #5bc0de; /* Цвет для статуса "ОЖИДАЕТ_КОНТРАКТ" */
+    }
+    .status-in-assembly {
+        background-color: #d9534f; /* Цвет для статуса "В_СБОРКЕ" */
+    }
+    .status-in-delivery {
+        background-color: #5cb85c; /* Цвет для статуса "ПЕРЕДАН_В_ДОСТАВКУ" */
+    }
+    .status-delivered {
+        background-color: #5cb85c; /* Цвет для статуса "ДОСТАВЛЕН" */
+    }
+    .status-rejected {
+        background-color: #d9534f; /* Цвет для статуса "ОТКЛОНЕН" */
+    }
+
+</style>
 <body>
 <div class="container-fluid">
     <div class="row">
@@ -58,9 +80,63 @@
         </tbody>
     </table>
 </div>
-<script>
+            <script>
+                $(document).ready(function () {
+                    var prevOrderId = null;
+                    var statuses = [];
 
-</script>
+                    $('.table tbody tr').each(function () {
+                        var currentOrderId = $(this).find('.accept-order').attr('data-orderid');
+                        var status = $(this).find('.order-status').text().trim();
+
+                        if (prevOrderId === null || prevOrderId !== currentOrderId) {
+                            $(this).find('.accept-order').show();
+                            $(this).find('.notaccept-order').show();
+                            if (status!=='В_ОЖИДАНИИ')
+                            {
+                                $(this).find('.accept-order').hide();
+                                $(this).find('.notaccept-order').hide();
+
+                            }
+
+                        }
+
+                        statuses.push(status);
+
+                        prevOrderId = currentOrderId;
+                    });
+
+                    console.log(statuses);
+                });
+                $(document).ready(function() {
+                    $('.table tbody tr').each(function() {
+                        var status = $(this).find('.order-status').text().trim();
+                        switch (status) {
+                            case 'В_ОЖИДАНИИ':
+                                $(this).addClass('status-waiting');
+                                break;
+                            case 'ОЖИДАЕТ_КОНТРАКТ':
+                                $(this).addClass('status-awaiting-contract');
+                                break;
+                            case 'В_СБОРКЕ':
+                                $(this).addClass('status-in-assembly');
+                                break;
+                            case 'ПЕРЕДАН_В_ДОСТАВКУ':
+                                $(this).addClass('status-in-delivery');
+                                break;
+                            case 'ДОСТАВЛЕН':
+                                $(this).addClass('status-delivered');
+                                break;
+                            case 'ОТКЛОНЕН':
+                                $(this).addClass('status-rejected');
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                });
+
+            </script>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 package com.example.diploma.services;
 
+import com.example.diploma.models.Contract;
 import com.example.diploma.models.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,26 @@ public class MyMailSender {
                 + "<p>Заказчик:"+order.getLastName()+" "+order.getFirstName()+"</p>"
                 + "<p>Заказ от:"+order.getDate()+"</p>"
         + "<p>Необходимая дата поставки:"+order.getDate_for_sh()+"</p>";
+
+        helper.setSubject(subject);
+
+        helper.setText(content, true);
+
+        javaMailSender.send(message);
+
+    }
+    public void sendContractToSupplier(Contract contract, String recipientEmail) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(contract.getUser().getEmail(), contract.getUser().getName());
+        helper.setTo(recipientEmail);
+        String subject = "Подписан новый контракт";
+
+        String content = "<p>У вас подписан и оплачен контракт в системе MySrm</p>"
+                + "<p>Заказчик:"+contract.getUser().getSurname()+" "+contract.getUser().getSurname()+"</p>"
+                + "<p>Заказ от:"+contract.getOrder().getDate()+"</p>"
+                + "<p>Необходимая дата поставки:"+contract.getOrder().getDate_for_sh()+"</p>";
 
         helper.setSubject(subject);
 

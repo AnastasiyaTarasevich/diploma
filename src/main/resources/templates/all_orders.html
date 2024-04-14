@@ -3,7 +3,33 @@
 <head th:insert="blocks/head::head">
 
 </head>
+<style>
+    /* Цвета подсветки для разных статусов */
+    .status-waiting {
+        background-color: #f0ad4e; /* Цвет для статуса "В_ОЖИДАНИИ" */
+    }
 
+    .status-awaiting-contract {
+        background-color: #5bc0de; /* Цвет для статуса "ОЖИДАЕТ_КОНТРАКТ" */
+    }
+
+    .status-in-assembly {
+        background-color: #d9534f; /* Цвет для статуса "В_СБОРКЕ" */
+    }
+
+    .status-in-delivery {
+        background-color: #5cb85c; /* Цвет для статуса "ПЕРЕДАН_В_ДОСТАВКУ" */
+    }
+
+    .status-delivered {
+        background-color: #5cb85c; /* Цвет для статуса "ДОСТАВЛЕН" */
+    }
+
+    .status-rejected {
+        background-color: #d9534f; /* Цвет для статуса "ОТКЛОНЕН" */
+    }
+
+</style>
 <body>
 <div class="container-fluid">
     <div class="row">
@@ -44,13 +70,19 @@
                             <p>Количество: <span th:text="${orderItems.quantity}"></span></p>
                         </th>
                         <th>
-                                            <form th:action="@{/viewContract}" method="get">
-                                                <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />
-                                                <button type="submit" class="btn btn-success accept-order" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Просмотреть контракт</button>
-                                            </form>
+                            <form th:action="@{/viewContract}" method="get">
+                                <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}">
+                                <button type="submit" class="btn btn-success accept-order"
+                                        th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">
+                                    Просмотреть контракт
+                                </button>
+                            </form>
                             <form th:action="@{/changeStatus}" method="post">
-                                <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}" />
-                                <button type="submit" class="btn btn-primary change-status" th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">Изменить статус</button>
+                                <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}">
+                                <button type="submit" class="btn btn-primary change-status"
+                                        th:attr="data-orderid=${orderItems.order.idorder}" style="">Изменить статус
+                                </button>
+                                <span class="delivery-warning" style="color: red; display: none;">Заказ передан в доставку, перейдите в раздел поставки</span>
                             </form>
 
                         </th>
@@ -64,11 +96,11 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#supplierFilter').on('input', function() {
+    $(document).ready(function () {
+        $('#supplierFilter').on('input', function () {
             var filterValue = $(this).val().toLowerCase();
             console.log(filterValue)
-            $('table tbody tr').each(function() {
+            $('table tbody tr').each(function () {
                 var supplierCompanyName = $('#supplierCompanyName').text().trim();
                 console.log('Название компании поставщика:', supplierCompanyName);
                 if (supplierCompanyName.includes(filterValue)) {
@@ -79,59 +111,89 @@
             });
         });
     });
-    $(document).ready(function ()
-    {
-
-        var statuses = [];
-
-        $('.table tbody tr').each(function () {
-
-            var status = $(this).find('.order-status').text().trim();
-
-
-            if (status==='ОЖИДАЕТ_КОНТРАКТ')
-            {
-                $(this).find('.accept-order').show();
-            }
-
-
-            statuses.push(status);
-
-        });
-
-        console.log(statuses);
-    });
     $(document).ready(function () {
-        var prevOrderId = null;
+
         var statuses = [];
 
         $('.table tbody tr').each(function () {
-            var currentOrderId = $(this).find('.accept-order').attr('data-orderid');
+
             var status = $(this).find('.order-status').text().trim();
 
-            if (prevOrderId === null || prevOrderId !== currentOrderId) {
-                $(this).find('.accept-order').show();
-                $(this).find('.notaccept-order').show();
-                $(this).find('.change-status').hide(); // Скрыть кнопку "Изменить статус"
-                if (status!=='В_ОЖИДАНИИ')
-                {
-                    $(this).find('.accept-order').hide();
-                    $(this).find('.notaccept-order').hide();
-                    $(this).find('.change-status').show();
-                }
-                if(status==='ДОСТАВЛЕН')
-                {
-                    $(this).find('button.change-status').prop('disabled', true);
-                }
-            }
 
+            if (status === 'ОЖИДАЕТ_КОНТРАКТ') {
+                $(this).find('.accept-order').show();
+            }
+            if (status === 'ПЕРЕДАН_В_ДОСТАВКУ') {
+                $(this).find('button.change-status').prop('disabled', true);
+
+            }
+            if (status === 'ДОСТАВЛЕН') {
+                $(this).find('button.change-status').prop('disabled', true);
+            }
+            if (status === 'ОТКЛОНЕН') {
+                $(this).find('button.change-status').hide();
+            }
             statuses.push(status);
 
-            prevOrderId = currentOrderId;
         });
 
         console.log(statuses);
     });
+    // $(document).ready(function () {
+    //     var prevOrderId = null;
+    //     var statuses = [];
+    //
+    //     $('.table tbody tr').each(function () {
+    //         var currentOrderId = $(this).find('.accept-order').attr('data-orderid');
+    //         var status = $(this).find('.order-status').text().trim();
+    //
+    //         if (prevOrderId === null || prevOrderId !== currentOrderId) {
+    //             $(this).find('.accept-order').show();
+    //             $(this).find('.change-status').hide(); // Скрыть кнопку "Изменить статус"
+    //             if (status!=='В_ОЖИДАНИИ')
+    //             {
+    //                 $(this).find('.accept-order').hide();
+    //                 $(this).find('.change-status').show();
+    //             }
+    //
+    //         }
+    //
+    //         statuses.push(status);
+    //
+    //         prevOrderId = currentOrderId;
+    //     });
+    //
+    //     console.log(statuses);
+    // });
+    $(document).ready(function () {
+        $('.table tbody tr').each(function () {
+            var status = $(this).find('.order-status').text().trim();
+            switch (status) {
+                case 'В_ОЖИДАНИИ':
+                    $(this).addClass('status-waiting');
+                    break;
+                case 'ОЖИДАЕТ_КОНТРАКТ':
+                    $(this).addClass('status-awaiting-contract');
+                    break;
+                case 'В_СБОРКЕ':
+                    $(this).addClass('status-in-assembly');
+                    break;
+                case 'ПЕРЕДАН_В_ДОСТАВКУ':
+                    $(this).addClass('status-in-delivery');
+                    $(this).find('.delivery-warning').show(); // Показать предупреждение
+                    break;
+                case 'ДОСТАВЛЕН':
+                    $(this).addClass('status-delivered');
+                    break;
+                case 'ОТКЛОНЕН':
+                    $(this).addClass('status-rejected');
+                    break;
+                default:
+                    break;
+            }
+        });
+    });
+
 </script>
 
 </body>

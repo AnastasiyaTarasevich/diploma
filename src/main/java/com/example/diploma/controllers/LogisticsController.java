@@ -2,7 +2,9 @@ package com.example.diploma.controllers;
 
 import com.example.diploma.models.*;
 import com.example.diploma.repos.*;
+import com.example.diploma.services.MyMailSender;
 import com.example.diploma.services.ShipmentService;
+import com.example.diploma.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +30,8 @@ public class LogisticsController {
     private final ShipmentService shipmentService;
     private final ShipmentRepo shipmentRepo;
     private final ShipmentFailersRepo shipmentFailersRepo;
+    private final UserService userService;
+    private final MyMailSender myMailSender;
     @GetMapping("/all_orders")
     public String getAllOrders(@AuthenticationPrincipal User userSession, Model model) {
 
@@ -42,7 +48,7 @@ public class LogisticsController {
         return "viewContract";
     }
     @PostMapping("/signContract")
-    public ResponseEntity<String> signContract(@RequestParam("contractId") int contractId) {
+    public ResponseEntity<String> signContract(@RequestParam("contractId") int contractId) throws MessagingException, UnsupportedEncodingException {
         // Логика для подписания контракта
         Contract contract = contractRepo.getById(contractId);
         contract.setStatus(ContractStatus.ПОДПИСАН);
@@ -54,6 +60,10 @@ public class LogisticsController {
 
         // Сохраняем платеж в базе данных
         paymentRepo.save(payment);
+        int id_user=contract.getSupplier().getIdUser();
+        User user=userService.findById(id_user);
+        myMailSender.sendContractToSupplier(contract,user.getEmail());
+
         return ResponseEntity.ok("Контракт успешно подписан и оплачен");
     }
     @PostMapping("/changeStatus")
@@ -62,12 +72,8 @@ public class LogisticsController {
         Order order = orderRepo.getById(id);
         List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItem> orderItems1=new ArrayList<>();
-//        User userFromDB = userRepo.findByLogin(userSession.getUsername());
-//        Supplier supplier = supplierRepo.findByIdUser(userFromDB.getIdUser());
+
         for (OrderItem orderItem : orderItems) {
-//            Supplier supplier1 = orderItem.getSupplier();
-//            if (supplier1.getIdsupplier() == supplier.getIdsupplier()) {
-                // Изменяем статус товара в соответствии с вашей логикой
                 orderItem.setStatus(updateItemStatus(orderItem.getStatus()));
                 orderItemRepo.save(orderItem);
                 if (orderItem.getStatus()==OrderStatus.ПЕРЕДАН_В_ДОСТАВКУ)
@@ -76,8 +82,6 @@ public class LogisticsController {
                 }
             }
 
-
-//        }
         if (!orderItems1.isEmpty()) {
             shipmentService.createShipmentForOrderItem(orderItems1);
         }
@@ -126,6 +130,25 @@ public class LogisticsController {
         shipmentsFailures.setDate(new Date(System.currentTimeMillis()));
         shipmentFailersRepo.save(shipmentsFailures);
         return "redirect:/list_shipments";
+    }
+    @GetMapping("/logisticsProfile_update")
+    public String editProfile(Model model, @AuthenticationPrincipal User user)
+    {
+        model.addAttribute("username",user.getLogin());
+
+        model.addAttribute("email",user.getEmail());
+        return "/logisticsProfile_update";
+    }
+    @PostMapping("/logisticsProfile_update")
+    public String updateProfileInfo(
+            @AuthenticationPrincipal User user,
+            @RequestParam String password,
+            @RequestParam String email,
+            @RequestParam String username
+    )
+    {
+        userService.updateProfile(user, password, email, username);
+        return "redirect:/logistics/";
     }
 
 }

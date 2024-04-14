@@ -29,7 +29,7 @@
             <td th:text="${contract.dateOfConclusion}"></td>
             <td th:text="${contract.type}"></td>
             <td th:text="${contract.cost}"></td>
-            <td th:text="${contract.status}"></td>
+            <td class="contract-status" th:text="${contract.status}"></td>
             <td th:text="${contract.supplier.companyName}"></td>
             <td>
                 <ul>
@@ -75,7 +75,21 @@
             }
         });
     }
+    $(document).ready(function ()
+    {
 
+        var statuses = [];
+
+        $('.table tbody tr').each(function () {
+
+            var status = $(this).find('.contract-status').text().trim();
+
+
+            if (status === 'ПОДПИСАН') {
+                $(this).find('.sign-contract').prop('disabled', true);
+            }
+        });
+    });
 </script>
 </body>
 </html>
