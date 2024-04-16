@@ -123,6 +123,7 @@ public class LogisticsController {
         int t= shipment.getDeliveryDelay()+delay;
         shipment.setDeliveryDelay(t);
         shipment.setArrivalDate(shipment.calculateDeliveryDelayDate());
+        shipment.setStatus(ShipmentStatus.ПРОБЛЕМЫ_С_ДОСТАВКОЙ);
         shipmentRepo.save(shipment);
         ShipmentsFailures shipmentsFailures=new ShipmentsFailures();
         shipmentsFailures.setShipment(shipment);

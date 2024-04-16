@@ -353,7 +353,18 @@ public class SupplierController
         model.addAttribute("payments", supplierPayments);
         return "list_payments";
     }
+    @GetMapping("/supplier_shipments")
+    public String getSupplierShipments(@AuthenticationPrincipal User user, Model model)
+    {
+        User userFromDB = userRepo.findByLogin(user.getUsername());
+        Supplier supplier=supplierRepo.findByIdUser(userFromDB.getIdUser());
+        // Получаем список поставок пользователя
+        List<Shipment> userShipments = shipmentRepo.findBySupplier(supplier);
 
+        // Передаем список поставок в модель
+        model.addAttribute("userShipments", userShipments);
+        return "supplier_shipments";
+    }
 
 
 

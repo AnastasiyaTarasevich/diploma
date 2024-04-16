@@ -38,10 +38,10 @@
         <thead>
         <tr>
             <th scope="col">Заказ №</th>
-            <th scope="col"> Статус</th>
             <th scope="col">Дата</th>
             <th scope="col">Заказчик</th>
             <th scope="col">Адрес</th>
+            <th scope="col">Телефон</th>
             <th scope="col">Товары</th>
 <!--            <th scope="col">Действия над заказом</th>-->
             <th scope="col"></th>
@@ -60,6 +60,7 @@
                 <p>Статус: <span class="order-status" th:text="${orderItems.status}"></span></p>
                 <p>Цена: <span th:text="${orderItems.product.price}"></span></p>
                 <p>Количество: <span th:text="${orderItems.quantity}"></span></p>
+                <p>Поставщик: <span th:text="${orderItems.getSupplier().companyName}"></span></p>
             </th>
             <th>
 

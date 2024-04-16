@@ -7,6 +7,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+<style>
+  .status-waiting {
+    background-color: #f0ad4e; /* Цвет для статуса "В_ОЖИДАНИИ" */
+  }
+  .status-done
+  {
+    background-color: #5cb85c;
+  }
+  .status-problems
+  {
+    background-color: #d9534f;
+  }
+</style>
 <body>
 <div class="container-fluid">
   <div class="row">
@@ -79,7 +92,25 @@
 
       });
     });
+    $(document).ready(function () {
+      $('.table tbody tr').each(function () {
+        var status = $(this).find('.shipment-status').text().trim();
+        switch (status) {
+          case 'В_ДОСТАВКЕ':
+            $(this).addClass('status-waiting');
+            break;
+          case 'ПРОБЛЕМЫ_С_ДОСТАВКОЙ':
+            $(this).addClass('status-problems');
+            break;
+          case 'ДОСТАВЛЕНО':
+            $(this).addClass('status-done');
+            break;
 
+          default:
+            break;
+        }
+      });
+    });
 
 </script>
 </body>

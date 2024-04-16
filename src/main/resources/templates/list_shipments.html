@@ -40,6 +40,19 @@
             border: none;
             border-radius: 4px;
         }
+
+         .status-waiting {
+             background-color: #f0ad4e; /* Цвет для статуса "В_ОЖИДАНИИ" */
+         }
+        .status-done
+        {
+            background-color: #5cb85c;
+        }
+        .status-problems
+        {
+            background-color: #d9534f;
+        }
+
     </style>
 </head>
 <body>
@@ -68,7 +81,7 @@
         <tbody th:each="sh: ${supplierShipments}">
         <tr>
             <th th:text="${sh.getIdshipment()}"></th>
-            <th th:text="${sh.getStatus()}"></th>
+            <th><span class="shipment-status" th:text="${sh.getStatus()}"></span></th>
             <th th:text="${sh.getCreationDate()}"></th>
             <th th:text="${sh.getArrivalDate()}"></th>
             <th th:text="${sh.getOrderItems().get(0).getOrder().getFirstName() + ' ' + sh.getOrderItems().get(0).getOrder().getLastName()}"></th>
@@ -141,7 +154,25 @@
         function closeModal(shipmentId) {
             document.getElementById('customModal' + shipmentId).style.display = 'none';
         }
+        $(document).ready(function () {
+            $('.table tbody tr').each(function () {
+                var status = $(this).find('.shipment-status').text().trim();
+                switch (status) {
+                    case 'В_ДОСТАВКЕ':
+                        $(this).addClass('status-waiting');
+                        break;
+                    case 'ПРОБЛЕМЫ_С_ДОСТАВКОЙ':
+                        $(this).addClass('status-problems');
+                        break;
+                    case 'ДОСТАВЛЕНО':
+                        $(this).addClass('status-done');
+                        break;
 
+                    default:
+                        break;
+                }
+            });
+        });
 </script>
 
         </div>

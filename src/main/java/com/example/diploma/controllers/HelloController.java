@@ -3,6 +3,7 @@ package com.example.diploma.controllers;
 
 import com.example.diploma.models.Roles;
 import com.example.diploma.models.User;
+import com.example.diploma.repos.UserRepo;
 import com.example.diploma.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ public class HelloController {
     @Value("${recaptcha.secret")
     private String secret;
     private final UserService userService;
+    private final UserRepo userRepo;
 
     private final RestTemplate restTemplate;
     @GetMapping("/")
@@ -145,12 +147,15 @@ public class HelloController {
         {
             model.addAttribute("passwError", "Пароли не совпадают");
             return "auth";
+        }else if (userRepo.findByEmail(user.getEmail())!=null) {
+            model.addAttribute("usernameError", "Пользователь с такой почтой существует!");
+            return "auth";
+
         }
         else if(!userService.createUser(user,role)) {
             model.addAttribute("usernameError", "Пользователь существует!");
             return "auth";
-        }
-        else return "redirect:/msgAfterReg";
+        } else return "redirect:/msgAfterReg";
 
     }
     @GetMapping("/msgAfterReg")
