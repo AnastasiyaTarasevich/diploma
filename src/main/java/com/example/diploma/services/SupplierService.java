@@ -1,9 +1,8 @@
 package com.example.diploma.services;
 
-import com.example.diploma.models.Order;
-import com.example.diploma.models.OrderItem;
-import com.example.diploma.models.Supplier;
+import com.example.diploma.models.*;
 import com.example.diploma.repos.OrderItemRepo;
+import com.example.diploma.repos.ShipmentRepo;
 import com.example.diploma.repos.SupplierRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 public class SupplierService {
     private final SupplierRepo supplierRepo;
     private final OrderItemRepo orderItemRepo;
+    private final ShipmentRepo shipmentRepo;
     public Supplier findById(int id) {
 
         return supplierRepo.findById(id).orElse(null);
@@ -58,5 +58,15 @@ public class SupplierService {
                 .map(OrderItem::getOrder)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public int getTotalDeliveredProductsBySupplier(Supplier supplier) {
+        // Подсчитываем общее количество доставленных товаров от поставщика
+        int totalDeliveredProducts = orderItemRepo.sumQuantityBySupplierAndStatus(supplier, OrderStatus.ДОСТАВЛЕН);
+        return totalDeliveredProducts;
+    }
+    public int getTotalDeliveredShipmentsBySupplier(Supplier supplier) {
+        // Вызываем метод репозитория для подсчета количества доставленных поставок
+        return shipmentRepo.countDeliveredShipmentsBySupplier(supplier, ShipmentStatus.ДОСТАВЛЕНО);
     }
 }

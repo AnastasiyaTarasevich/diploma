@@ -19,12 +19,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,13 +37,9 @@ public class ExcelImportController {
 
     private final SupplierRepo supplierRepo;
     private final SupplierReviewRepo supplierReviewRepo;
-    private final UserRepo userRepo;
-    private final ProductService productService;
-    private final CategoryService categoryService;
 
     @PostMapping("/importReviews")
-    public ResponseEntity<String> importReviews(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-
+    public String importReviews(@RequestParam("file") MultipartFile file) {
         supplierReviewRepo.deleteAll();
         try (InputStream inputStream = file.getInputStream()) {
             Workbook workbook = new XSSFWorkbook(inputStream);
@@ -63,24 +54,21 @@ public class ExcelImportController {
                 }
 
                 SupplierReview supplierReview = new SupplierReview();
-                 currentRow.getCell(0).setCellType(CellType.STRING);
-                 String name= (currentRow.getCell(0).getStringCellValue());
+                currentRow.getCell(0).setCellType(CellType.STRING);
+                String name= (currentRow.getCell(0).getStringCellValue());
                 Supplier supplier=supplierRepo.findSupplierByCompanyName(name);
                 supplierReview.setSupplier(supplier);
                 supplierReview.setGrade(currentRow.getCell(1).getNumericCellValue());
                 supplierReview.setComments(currentRow.getCell(2).getStringCellValue());
                 supplierReview.setDateOfCreate(new Date(currentRow.getCell(3).getDateCellValue().getTime()));
-               supplierReviewRepo.save(supplierReview);
+                supplierReviewRepo.save(supplierReview);
 
             }
 
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .header("Location", "/rate")
-                    .body("Отзывы успешно импортированы.");
+            return "Отзывы успешно импортированы.";
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Ошибка при импорте отзывов.");
+            return "Ошибка при импорте отзывов.";
         }
     }
 

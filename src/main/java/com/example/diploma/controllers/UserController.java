@@ -374,11 +374,20 @@ String getSuccesDefect()
             double defectsWeight = 0.5;
             double reviewsWeight = 0.2;
             double failuresWeight = 0.3;
+            int TotalProducts=supplierService.getTotalDeliveredProductsBySupplier(supplier);
+            int TotalDeliveries=supplierService.getTotalDeliveredShipmentsBySupplier(supplier);
+            // Вычисляем коэффициент дефектов (defectRatio)
+            double defectRatio =  ((double) defectsCount / TotalProducts);
 
-            double rating = (defectsCount * defectsWeight) + (reviewsCount * reviewsWeight) + (failuresCount * failuresWeight);
+            // Вычисляем коэффициент срывов поставок (delivery_failure_ratio)
+            double deliveryFailureRatio =  ((double) (TotalDeliveries-failuresCount) / TotalDeliveries);
+            double defectsScore=1+4*defectRatio;
+            double deliveryScore=1+4*deliveryFailureRatio;
+            double supplierRating = reviewsCount * reviewsWeight + defectsScore * defectsWeight + deliveryScore * failuresWeight;
 
-            double roundedRating = Math.round(rating * 100.0) / 100.0;
+            // Ограничиваем рейтинг максимальным значением 5
 
+            double roundedRating = Math.round(supplierRating * 100.0) / 100.0;
             // Сохранить округленную оценку поставщика в базе данных или выполнить другие необходимые действия
             supplier.setRating(roundedRating);
             supplierRepo.save(supplier);
