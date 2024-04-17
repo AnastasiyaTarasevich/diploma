@@ -43,6 +43,7 @@ public class UserController
     private final SupplierDefectRepo supplierDefectRepo;
     private final UserService userService;
     private final MyMailSender myMailSender;
+    private final CategoryService categoryService;
     @GetMapping("/supplier_reading")
     public String readSupplier(Model model)
     {
@@ -57,6 +58,9 @@ public class UserController
 
             Iterable<Product> products = productRepo.findProductsBySupplierId(id);
             model.addAttribute("products", products);
+        List<Category>category=categoryService.getAllCategoriesForSupplier(id);
+        model.addAttribute("categories",category);
+        model.addAttribute("idSupplier",id);
             model.addAttribute("title", "Каталог товаров");
             return "supplier_catalog";
 
@@ -71,44 +75,47 @@ public class UserController
         return "prod_details_for_user";
 
     }
-    @PostMapping("/supplier_catalog")
-    public String filters(@RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort, Model model)
+
+    @PostMapping("/supplier_catalog/{supplierId}")
+    public String filters(@RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort,@PathVariable int supplierId,  Model model)
     {
-        List<Product> products=productService.findAll();
+        List<Product> products=productRepo.findProductsBySupplierId(supplierId);
         // выполнить необходимые действия для обработки фильтров и сортировки
-        Iterable<Category> category=categoryRepo.findAll();
+      List<Category>category=categoryService.getAllCategoriesForSupplier(supplierId);
         model.addAttribute("categories",category);
         List<Product> filteredProducts = productService.getFilteredProducts(products,sort);
         // добавить результаты в модель и вернуть представление
+        model.addAttribute("idSupplier",supplierId);
         model.addAttribute("products", filteredProducts);
         return "supplier_catalog";
     }
-//    @GetMapping("/supplier_catalog{id}")
-//    public String filterCat(@PathVariable int id, Model model)
+    @GetMapping("/supplier_catalog/{supplierId}/{categoryId}")
+    public String filterCat(@PathVariable int supplierId,@PathVariable int categoryId, Model model)
+    {
+        Iterable<Product> products;
+       Category category=categoryRepo.getById(categoryId);
+        products = productRepo.findProductByCategoryAndSupplierId(category,supplierId);
+        model.addAttribute("products",products);
+        model.addAttribute("idSupplier",supplierId);
+        Iterable<Category> category1=categoryService.getAllCategoriesForSupplier(supplierId);
+        model.addAttribute("categories",category1);
+        return "supplier_catalog";
+    }
+//    @PostMapping("/supplier_catalog/{supplierId}/{categoryName}")
+//    public String sortCat(@PathVariable int supplierId,@PathVariable String categoryName, @RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort, Model model)
 //    {
-//        Iterable<Product> products;
 //        Category category=new Category();
-//        category.setIdcategory(id);
-//        products = productRepo.findProductByCategory(category);
-//        model.addAttribute("products",products);
-//        Iterable<Category> category1=categoryRepo.findAll();
-//        model.addAttribute("categories",category1);
-//        return "supplier_catalog";
-//    }
-//    @PostMapping("/supplier_catalog{id}")
-//    public String sortCat(@PathVariable int id,@RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort, Model model)
-//    {
-//        Category category=new Category();
-//        category.setIdcategory(id);
+//        category.setName(categoryName);
 //        // выполнить необходимые действия для обработки фильтров и сортировки
-//        List<Product>  products = productService.findProductByCategory(category);
-//        Iterable<Category> category1=categoryRepo.findAll();
+//        List<Product>  products = productService.findProductByCategoryAndSupplier(category,supplierId);
+//        Iterable<Category> category1= categoryService.getAllCategoriesForSupplier(supplierId);
 //        model.addAttribute("categories",category1);
 //        List<Product> filteredProducts = productService.getFilteredProducts(products,sort);
 //        // добавить результаты в модель и вернуть представление
 //        model.addAttribute("products", filteredProducts);
 //        return "supplier_catalog";
 //    }
+
     @GetMapping("/supplier_catalog/search")
     public String productFind(@RequestParam (name="keyword")String key, @PathVariable int id, Model model)
     {

@@ -155,8 +155,8 @@ public class ProductService {
         return products;
     }
 
-    public List<Product> findProductByCategory(Category category)
+    public List<Product> findProductByCategoryAndSupplier(Category category,int supplierId)
     {
-        return productRepo.findProductByCategory(category);
+        return productRepo.findProductByCategoryAndSupplierId(category,supplierId);
     }
 }

@@ -22,8 +22,8 @@
     <ul id="goods" class="col-md-12">
 
         <div class="btn-group">
-            <a href="/supplier_catalog">  <button type="button" data-category="0" class="btn btn-default active js-category">Все категории</button></a>
-            <form th:each="i:${categories}"  th:action="*{'supplier_catalog' + i.idcategory}">
+            <a th:href="*{'/supplier_catalog/' + idSupplier}">  <button type="button" data-category="0" class="btn btn-default active js-category">Все категории</button></a>
+            <form th:each="i:${categories}"  th:action="*{'/supplier_catalog/' + idSupplier+'/'+i.getIdcategory()}">
                 <input type="submit" class="btn btn-default js-category" th:value="*{i.getName()}">
             </form>
         </div>

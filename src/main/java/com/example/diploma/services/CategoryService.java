@@ -1,12 +1,18 @@
 package com.example.diploma.services;
 
 import com.example.diploma.models.Category;
+import com.example.diploma.models.Product;
 import com.example.diploma.repos.CategoryRepo;
 import com.example.diploma.repos.ProductRepo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Data
@@ -39,4 +45,17 @@ public class CategoryService
     {
         return categoryRepo.findByName(name).orElseThrow();
     }
+    public List<Category> getAllCategoriesForSupplier(int supplierId) {
+        // Загрузка всех товаров для указанного поставщика
+        List<Product> products = productRepo.findProductsBySupplierId(supplierId);
+
+        // Собираем уникальные категории товаров данного поставщика
+        Set<Category> categories = new HashSet<>();
+        for (Product product : products) {
+            categories.add(product.getCategory());
+        }
+
+        return new ArrayList<>(categories);
+    }
+
 }
