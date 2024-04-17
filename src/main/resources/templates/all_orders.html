@@ -72,6 +72,7 @@
                         <th>
                             <form th:action="@{/viewContract}" method="get">
                                 <input type="hidden" name="orderId" th:value="${orderItems.order.idorder}">
+                                <input type="hidden" name="companyName" th:value="${orderItems.supplier.companyName}">
                                 <button type="submit" class="btn btn-success accept-order"
                                         th:attr="data-orderid=${orderItems.order.idorder}" style="display: none;">
                                     Просмотреть контракт

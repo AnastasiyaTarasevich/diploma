@@ -425,4 +425,11 @@ String getSuccesDefect()
         userService.updateProfile(user, password, email, username);
         return "redirect:/user/";
     }
+
+
+    @GetMapping("/delivery_schedule")
+    public String delivery_schedule(Model model)
+    {
+        return "delivery_schedule";
+    }
 }

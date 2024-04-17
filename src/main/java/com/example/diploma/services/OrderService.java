@@ -2,11 +2,14 @@ package com.example.diploma.services;
 
 import com.example.diploma.models.Order;
 import com.example.diploma.models.OrderItem;
+import com.example.diploma.models.OrderStatus;
 import com.example.diploma.repos.OrderItemRepo;
 import com.example.diploma.repos.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -43,4 +46,8 @@ public class OrderService {
 //            orderRepo.save(order);
 //        });
 //    }
+public List<Order> getOrdersByDeliveryDateAndStatus(LocalDate startDate) {
+    // Выполняем запрос к репозиторию для получения заказов по дате поставки и статусу
+    return orderRepo.findOrdersByDeliveryDateAndStatus(startDate);
+}
 }

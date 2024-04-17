@@ -32,6 +32,7 @@ public class LogisticsController {
     private final ShipmentFailersRepo shipmentFailersRepo;
     private final UserService userService;
     private final MyMailSender myMailSender;
+    private final SupplierRepo supplierRepo;
     @GetMapping("/all_orders")
     public String getAllOrders(@AuthenticationPrincipal User userSession, Model model) {
 
@@ -40,10 +41,11 @@ public class LogisticsController {
         return "all_orders";
     }
     @GetMapping("/viewContract")
-    public String viewUserContract(@RequestParam("orderId") int orderid, @AuthenticationPrincipal User userSession, Model model)
+    public String viewUserContract(@RequestParam("orderId") int orderid,@RequestParam("companyName") String  companyName, @AuthenticationPrincipal User userSession, Model model)
     {
         Order order=orderRepo.getById(orderid);
-        Contract contract=contractRepo.getContractByOrder(order);
+        Supplier supplier=supplierRepo.findSupplierByCompanyName(companyName);
+        Contract contract=contractRepo.getContractByOrderAndSupplier(order,supplier);
         model.addAttribute("contract", contract);
         return "viewContract";
     }

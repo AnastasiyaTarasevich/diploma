@@ -97,4 +97,22 @@ public class User implements UserDetails {
     }
 
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "idUser=" + idUser +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", active=" + active +
+                ", resetPasswordToken='" + resetPasswordToken + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", status=" + status +
+                ", roles=" + roles +
+                ", productList=" + productList +
+                ", orders=" + orders +
+                '}';
+    }
 }

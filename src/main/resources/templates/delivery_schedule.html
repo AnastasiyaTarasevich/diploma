@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head th:insert="blocks/head::head">
+
+</head>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 10px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .month-buttons {
+            margin-bottom: 20px;
+        }
+        /* Стиль для зеленых ячеек с информацией */
+        .has-info {
+            background-color: lightgreen;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+    </style>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/user_nav::div"></div>
+        </div>
+        <div class="col-md-7">
+            <br><br>
+            <div class="container">
+<div class="month-buttons">
+    <button onclick="previousMonth()">Предыдущий месяц</button>
+    <span id="currentMonthYear"></span>
+    <button onclick="nextMonth()">Следующий месяц</button>
+</div>
+
+<table id="calendarTable">
+    <thead>
+    <tr>
+        <th>Вс</th>
+        <th>Пн</th>
+        <th>Вт</th>
+        <th>Ср</th>
+        <th>Чт</th>
+        <th>Пт</th>
+        <th>Сб</th>
+    </tr>
+    </thead>
+    <tbody id="calendarBody">
+    <!-- Здесь будут генерироваться дни месяца -->
+    </tbody>
+</table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentDate = new Date();
+
+    async function renderCalendar(month, year) {
+        const calendarBody = document.getElementById('calendarBody');
+        calendarBody.innerHTML = '';
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        if (firstDayOfMonth.getDay() === 0) {
+            firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 1);
+        }
+        const startDayOfWeek = firstDayOfMonth.getDay();
+
+        let date = 1;
+        let row = document.createElement('tr');
+
+        for (let i = 0; i < startDayOfWeek; i++) {
+            const cell = document.createElement('td');
+            row.appendChild(cell);
+        }
+
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const cell = document.createElement('td');
+            cell.textContent = day;
+
+            const currentDate = new Date(year, month, day);
+            const formattedDate = formatISODateTime(currentDate);
+
+            try {
+                const orders = await fetchOrdersByDate(formattedDate);
+
+                if (orders && orders.length > 0) {
+                    const ordersList = createOrdersList(orders);
+                    cell.appendChild(ordersList); // Добавляем список заказов в ячейку
+                    cell.classList.add('has-info');
+                }
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            }
+
+            row.appendChild(cell);
+
+            if (row.children.length === 7) {
+                calendarBody.appendChild(row);
+                row = document.createElement('tr');
+            }
+        }
+
+        if (row.children.length > 0) {
+            while (row.children.length < 7) {
+                const cell = document.createElement('td');
+                row.appendChild(cell);
+            }
+            calendarBody.appendChild(row);
+        }
+
+        const currentMonthYear = document.getElementById('currentMonthYear');
+        currentMonthYear.textContent = `${firstDayOfMonth.toLocaleString('ru', { month: 'long' })}, ${year}`;
+    }
+
+    function createOrdersList(orders) {
+        const ordersList = document.createElement('ul');
+        ordersList.style.listStyleType = 'none'; // Убираем маркеры (кружочки) у списка
+        const uniqueCompanies = new Set();
+
+        orders.forEach(order => {
+            uniqueCompanies.add(order.companyName);
+        });
+
+        uniqueCompanies.forEach(companyName => {
+            const listItem = document.createElement('li');
+            listItem.textContent = companyName;
+            ordersList.appendChild(listItem);
+        });
+
+        return ordersList;
+    }
+
+
+    async function fetchOrdersByDate(deliveryDate) {
+        const url = `/api/orders?deliveryDate=${deliveryDate}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const orderItems = await response.json();
+            console.log('Полученные заказы:', orderItems);
+            return orderItems;
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            return []; // Возвращаем пустой массив в случае ошибки
+        }
+    }
+
+    function formatISODateTime(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function previousMonth() {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar(currentDate.getMonth(), currentDate.getFullYear());
+    }
+
+    function nextMonth() {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar(currentDate.getMonth(), currentDate.getFullYear());
+    }
+
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCalendar(currentDate.getMonth(), currentDate.getFullYear());
+    });
+
+</script>
+
+</body>
+</html>
