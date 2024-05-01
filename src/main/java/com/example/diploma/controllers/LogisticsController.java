@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,8 +112,10 @@ public class LogisticsController {
         Shipment shipment=shipmentRepo.getById(shipmentId);
         shipment.setStatus(ShipmentStatus.ДОСТАВЛЕНО);
         shipment.setArrivalDate(new Date(System.currentTimeMillis()));
+
         for (OrderItem orderItem : shipment.getOrderItems()) {
             orderItem.setStatus(OrderStatus.ДОСТАВЛЕН);
+            orderItem.getOrder().setDate_for_sh(LocalDate.now());
         }
         shipmentRepo.save(shipment);
         return "redirect:/list_shipments";

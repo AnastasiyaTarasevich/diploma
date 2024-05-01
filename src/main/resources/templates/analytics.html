@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head th:insert="blocks/head::head">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/user_nav::div"></div>
+            <!-- Меню -->
+        </div>
+        <div class="col-md-9 d-flex align-items-center ">
+            <br><br>
+            <div class="container">
+                <div class="link-container">
+                    <a href="/supplier-defectsGraph" class="graph-link font-weight-bold text-decoration-none text-primary">
+                        Диаграмма количества брака в каждом месяце
+                    </a>
+                </div>
+                <!-- Дополнительные ссылки -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -109,9 +109,9 @@ public class Supplier {
         }
 
         int count = 0;
-        for (SupplierDefect failure : defects) {
-            if (failure.getShipment().getSupplier().equals(this)) {
-                count++;
+        for (SupplierDefect defect : defects) {
+            if (defect.getShipment().getSupplier().equals(this)) {
+                count += defect.getQuantity();
             }
         }
 

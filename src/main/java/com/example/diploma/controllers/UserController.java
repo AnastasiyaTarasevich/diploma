@@ -5,7 +5,6 @@ import com.example.diploma.models.*;
 import com.example.diploma.repos.*;
 import com.example.diploma.services.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -432,4 +431,17 @@ String getSuccesDefect()
     {
         return "delivery_schedule";
     }
+
+
+    @GetMapping("/analytics")
+    public String getAnalytics()
+    {
+        return "analytics";
+    }
+    @GetMapping("/supplier-defectsGraph")
+    public String getSh_graph()
+    {
+        return "supplier-defectsGraph";
+    }
+
 }

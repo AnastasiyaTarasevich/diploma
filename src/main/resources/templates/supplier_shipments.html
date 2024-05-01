@@ -24,7 +24,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 p-0">
-            <div th:insert="blocks/user_nav::div"></div>
+            <div th:insert="blocks/supplier_nav::div"></div>
         </div>
         <div class="col-md-7">
             <br><br>
@@ -39,7 +39,6 @@
                         <th scope="col">Товары</th>
                         <th scope="col">Приблизительная дата прибытия</th>
                         <th scope="col">Дней задержки</th>
-                        <th scope="col">Действия</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -67,12 +66,7 @@
                         </th>
                         <th th:text="${sh.getArrivalDate()}"></th>
                         <th th:text="${sh.getDeliveryDelay()}"></th>
-                        <th>
-                            <form th:action="@{/AddDefect}" method="get">
-                                <input type="hidden" name="shipmentId" th:value="${sh.getIdshipment()}" />
-                                <button type="submit" class="btn btn-danger" th:attr="data-shid=${sh.getIdshipment()}" style="display: none" >Отметить брак</button>
-                            </form>
-                        </th>
+
                     </tr>
                     </tbody>
                 </table>

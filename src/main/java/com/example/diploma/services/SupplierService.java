@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,4 +70,17 @@ public class SupplierService {
         // Вызываем метод репозитория для подсчета количества доставленных поставок
         return shipmentRepo.countDeliveredShipmentsBySupplier(supplier, ShipmentStatus.ДОСТАВЛЕНО);
     }
+
+    public int getDeliveryQuantityBySupplierAndMonth(Supplier supplier, String month) {
+        List<OrderItem> deliveredItems = orderItemRepo.findBySupplierAndStatus(supplier, OrderStatus.ДОСТАВЛЕН);
+        int totalDeliveryQuantity = 0;
+        for (OrderItem item : deliveredItems) {
+            LocalDate deliveryDate = item.getOrder().getDate_for_sh();
+            if (deliveryDate != null && deliveryDate.getMonth().toString().equals(month)) {
+                totalDeliveryQuantity += item.getQuantity();
+            }
+        }
+        return totalDeliveryQuantity;
+    }
+
 }

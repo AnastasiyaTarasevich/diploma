@@ -17,4 +17,7 @@ public interface OrderItemRepo extends JpaRepository<OrderItem, Integer> {
     OrderItem findByProduct_Name(String name);
     @Query("SELECT SUM(oi.quantity) FROM OrderItem oi WHERE oi.supplier = :supplier AND oi.status = :status")
     int sumQuantityBySupplierAndStatus(@Param("supplier") Supplier supplier, @Param("status") OrderStatus status);
+
+
+    List<OrderItem> findBySupplierAndStatus(Supplier supplier, OrderStatus orderStatus);
 }
