@@ -3,7 +3,7 @@ fetch('/supplier-defects')
     .then(data => {
         // Данные успешно получены, используйте их для построения диаграммы
         console.log(data); // Проверьте данные в консоли браузера
-        renderChart(data);
+        renderChart1(data);
     })
     .catch(error => {
         console.error('Error fetching data:', error); // В случае ошибки выведите сообщение об ошибке
@@ -22,7 +22,7 @@ function getRandomColor() {
 // Функция для построения диаграммы
 
 
-function renderChart(data) {
+async function renderChart1(data) {
     var suppliers = Object.keys(data);
     var allMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var monthsWithData = [];
@@ -60,14 +60,26 @@ function renderChart(data) {
                     beginAtZero: true
                 }
             }]
+        },
+        title: {
+            display: true,
+            text: "Процентное соотношение брака в партии по месяцам"
         }
     };
 
+    if (window.defectsChart instanceof Chart) {
+        // Если да, уничтожаем его
+        window.defectsChart.destroy();
+    }
+
     var ctx = document.getElementById('defectsChart').getContext('2d');
 
-    var defectsChart = new Chart(ctx, {
+    window.defectsChart = new Chart(ctx, {
         type: 'bar',
         data: chartData,
-        options: options
+        options: options,
+
     });
+    var chartTitle = document.getElementById('chartTitle');
+    chartTitle.innerText = "Процентное соотношение брака в партии по месяцам";
 }

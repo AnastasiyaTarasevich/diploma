@@ -51,6 +51,7 @@ public class SupplierController
     private final ShipmentService shipmentService;
     private final ShipmentRepo shipmentRepo;
     private final ShipmentFailersRepo shipmentFailersRepo;
+    private final PriceInTimeRepo priceInTimeRepo;
     @GetMapping("/catalog")
     public String getCatalog(@RequestParam(name="name",required = false) String name, Principal principal, Model model)
     {
@@ -92,7 +93,18 @@ public class SupplierController
             category = name;
         }
         categoryService.saveCat(product.getIdProduct(), category);
+
         productService.saveProduct(product,file1,category);
+        Product savedProduct = productService.getProductById(product.getIdProduct()); // Предполагается, что у продукта есть метод getIdProduct() для получения его идентификатора
+
+        // Создаем новую цену для нового продукта
+        PriceInTime priceInTime = new PriceInTime();
+        priceInTime.setChangeDate(LocalDate.now());
+        priceInTime.setProduct(savedProduct);
+        priceInTime.setNewPrice(product.getPrice()); // Предполагается, что цена нового продукта хранится в поле "price"
+
+        // Сохраняем новую цену в базу данных
+        priceInTimeRepo.save(priceInTime);
 
 
         return "redirect:/catalog";
@@ -119,8 +131,17 @@ public class SupplierController
         return "prod_edit";
     }
     @PostMapping("/prod_edit/{id}")
-    public String productEdit(@PathVariable int id, @ModelAttribute Product updatedProduct, @RequestParam("category1") String category, @RequestParam("first_file") MultipartFile file1) throws IOException {
+    public String productEdit(@PathVariable int id,@RequestParam("OldPrice") Double oldPrice , @ModelAttribute Product updatedProduct, @RequestParam("category1") String category, @RequestParam("first_file") MultipartFile file1) throws IOException {
+        Product existingProduct = productService.getProductById(id);
+        PriceInTime priceInTime = new PriceInTime();
+        priceInTime.setChangeDate(LocalDate.now());
+        priceInTime.setProduct(existingProduct);
+        priceInTime.setNewPrice(updatedProduct.getPrice());
+        priceInTimeRepo.save(priceInTime);
+        List<PriceInTime> prices = existingProduct.getPrices();
+        prices.add(priceInTime);
         productService.updateProduct(id,updatedProduct,file1,category);
+
         return"redirect:/prod_details/{id}";
     }
     @PostMapping("/list_prod/{id}")

@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head th:insert="blocks/head::head">
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <div th:insert="blocks/user_nav::div"></div>
+            <!-- Меню -->
+        </div>
+
+        <div class="col-md-9 d-flex align-items-center ">
+            <br><br>
+            <!-- Создаем элемент canvas, который будет содержать круговую диаграмму -->
+            <canvas id="deliveredProductsChart" style="width: 100px; height: 100px;"></canvas>
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Скрипт для получения данных из REST-контроллера и построения круговой диаграммы -->
+<script src="/js/delivered-categoriesGraph.js"></script>
+</body>
+</html>
+

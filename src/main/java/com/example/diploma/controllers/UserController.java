@@ -443,5 +443,30 @@ String getSuccesDefect()
     {
         return "supplier-defectsGraph";
     }
+    @GetMapping("/delivered_categoriesGraph")
+    public String getcat_graph()
+    {
+        return "delivered_categoriesGraph";
+    }
+    @GetMapping("/orderStatusesGraph")
+    public String getOrder_graph()
+    {
+        return "orderStatusesGraph";
+    }
 
+    @GetMapping("/orderVolume")
+    public String getOrder_volume()
+    {
+        return "orderVolume";
+    }
+    @GetMapping("/average_deliveryTime")
+    public String getAverageDelivery()
+    {
+        return "average_deliveryTime";
+    }
+    @GetMapping("/priceInTime_Changes")
+    public String getpriceInTime_Changes()
+    {
+        return "priceInTime_Changes";
+    }
 }

@@ -1,26 +1,68 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head th:insert="blocks/head::head">
+    <style>
+        canvas {
+            width: 100%; /* Ширина графика */
+            height: 100%; /* Высота графика */
+        }
+        .canvas-container {
+            width: 100%; /* Фиксированная ширина контейнера для графика */
+            height: 300px; /* Фиксированная высота графика */
+            border: 1px solid rgba(0, 0, 0, 0.1); /* Еле заметная рамка */
+            border-radius: 5px; /* Скругленные углы */
+            margin-bottom: 20px; /* Отступ снизу для создания промежутка между графиками */
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
+    <div class="row ">
         <div class="col-md-3 p-0">
             <div th:insert="blocks/user_nav::div"></div>
             <!-- Меню -->
         </div>
-        <div class="col-md-9 d-flex align-items-center ">
+        <div class="col-md-7 pl-3 d-flex align-items-center ">
             <br><br>
-            <div class="container">
-                <div class="link-container">
-                    <a href="/supplier-defectsGraph" class="graph-link font-weight-bold text-decoration-none text-primary">
-                        Диаграмма количества брака в каждом месяце
-                    </a>
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-4 canvas-container">
+                        <h6 id="chartTitle"></h6>
+                        <canvas id="defectsChart"></canvas>
+                    </div>
+                    <div class="col-md-4 canvas-container">
+                        <h6 id="chart2Title"></h6>
+                        <canvas id="deliveredProductsChart"></canvas>
+                    </div>
+                    <div class="col-md-4 canvas-container">
+                        <h6 id="chart3Title"></h6>
+                        <canvas id="deliveryTimeChart"></canvas>
+                    </div>
+                    <div class="col-md-4 canvas-container">
+                        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                    </div>
+                    <div class="col-md-4 canvas-container">
+                        <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+                    </div>
+                    <div class="col-md-4 canvas-container">
+                        <h6 id="chart4Title"></h6>
+                    <div id="buttons"></div>
+                    <div id="chartContainer3">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    </div>
                 </div>
-                <!-- Дополнительные ссылки -->
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+<script src="/js/defectsGraph.js"></script>
+<script src="/js/delivered-categoriesGraph.js"></script>
+<script src="/js/averageDelivery.js"></script>
+<script src="/js/order-statusesGraph.js"></script>
+<script src="/js/orderVolume.js"></script>
+<script src="/js/priceInTime_Changes.js"></script>
 </body>
 </html>

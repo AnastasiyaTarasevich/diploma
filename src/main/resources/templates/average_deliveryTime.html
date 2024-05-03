@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Average Delivery Time by Supplier</title>
+    <!-- Подключаем библиотеку Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<!-- Создаем элемент canvas, который будет содержать график -->
+<canvas id="deliveryTimeChart" width="400" height="400"></canvas>
+
+<!-- Скрипт для получения данных из REST-контроллера и построения графика -->
+<script>
+    fetch('/average_delivery_time_by_supplier')
+        .then(response => response.json())
+        .then(data => {
+            // После получения данных строим график
+            renderChart(data);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+
+    // Функция для построения графика
+    function renderChart(data) {
+        // Получаем контекст для рисования на элементе canvas
+        var ctx = document.getElementById('deliveryTimeChart').getContext('2d');
+
+        // Создаем график с полученными данными
+        var deliveryTimeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data), // Названия поставщиков
+                datasets: [{
+                    label: 'Average Delivery Time (days)', // Название набора данных
+                    data: Object.values(data), // Среднее время доставки для каждого поставщика
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)', // Цвет столбцов
+                    borderColor: 'rgba(54, 162, 235, 1)', // Цвет границ столбцов
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true // Начинать ось Y с 0
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -20,4 +20,6 @@ public interface OrderItemRepo extends JpaRepository<OrderItem, Integer> {
 
 
     List<OrderItem> findBySupplierAndStatus(Supplier supplier, OrderStatus orderStatus);
+
+    List<OrderItem> findByStatus(OrderStatus orderStatus);
 }

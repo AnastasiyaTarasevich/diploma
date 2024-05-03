@@ -34,6 +34,12 @@ public class Product {
     @Basic
     @Column(name = "vendor_code", nullable = false)
     private String vendor_code;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<PriceInTime> prices;
+    public void addPrice(PriceInTime price) {
+        prices.add(price);
+        price.setProduct(this); // Устанавливаем ссылку на этот продукт у добавленной цены
+    }
     @PrePersist
     private void init()
     {

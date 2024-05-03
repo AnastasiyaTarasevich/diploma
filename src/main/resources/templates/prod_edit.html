@@ -81,7 +81,8 @@
         <div class="form-group">
             <label class="col-md-4 control-label"></label>
             <div class="col-md-4"><br>
-                <input type="submit" class="btn btn-warning" value="Изменить товар" > </input>
+                <input name="OldPrice" type="hidden" th:value="${product.getPrice()}">
+                <input type="submit" class="btn btn-warning" value="Изменить товар">
             </div>
         </div>
 

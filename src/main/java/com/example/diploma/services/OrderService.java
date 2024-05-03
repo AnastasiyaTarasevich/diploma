@@ -50,4 +50,9 @@ public List<Order> getOrdersByDeliveryDateAndStatus(LocalDate startDate) {
     // Выполняем запрос к репозиторию для получения заказов по дате поставки и статусу
     return orderRepo.findOrdersByDeliveryDateAndStatus(startDate);
 }
+
+
+
+
+
 }
