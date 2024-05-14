@@ -16,16 +16,20 @@
                     <thead class="table-dark">
                     <tr>
                         <th scope="col">Критерий</th>
+                        <th scope="col">Вес критерия</th>
                         <th scope="col">5 баллов</th>
                         <th scope="col">4 балла</th>
                         <th scope="col">3 балла</th>
                         <th scope="col">2 балла</th>
                         <th scope="col">1 балл</th>
+
                     </tr>
                     </thead>
                     <tbody>
+
                     <tr>
                         <td>1. Качество товара</td>
+                        <td>0.3</td>
                         <td>100 % без брака</td>
                         <td>брак составляет 2-5%</td>
                         <td>брак составляет 5-10%</td>
@@ -34,6 +38,7 @@
                     </tr>
                     <tr>
                         <td>2. Количество задержек</td>
+                        <td>0.2</td>
                         <td>100% без задержек</td>
                         <td>задержки составляют 5-10%</td>
                         <td>задержки составляют 11-20%</td>
@@ -42,6 +47,7 @@
                     </tr>
                     <tr>
                         <td>3. Цена</td>
+                        <td>0.25</td>
                         <td>ниже среднерыночной</td>
                         <td>соответствует среднерыночной</td>
                         <td>выше среднерыночной на 1-2%</td>
@@ -50,6 +56,7 @@
                     </tr>
                     <tr>
                         <td>4. Условия оплаты</td>
+                        <td>0.15</td>
                         <td>всевозможные</td>
                         <td>по факту поставки</td>
                         <td>25% предоплаты</td>
@@ -58,11 +65,12 @@
                     </tr>
                     <tr>
                         <td>5. Отзывы</td>
+                        <td>0.1</td>
                         <td>4,5-5</td>
-                        <td>3,5-4</td>
-                        <td>2,5-3</td>
-                        <td>1,5-2</td>
-                        <td>0,5-1</td>
+                        <td>3,5-4,4</td>
+                        <td>2,5-3,4</td>
+                        <td>1,5-2,4</td>
+                        <td>0,5-1,4</td>
                     </tr>
                     </tbody>
                 </table>
@@ -100,16 +108,17 @@
                 <span th:text="${supplier.getDefectsCount(defects)}"></span>
             </td>
             <td>
-                <span ></span>
+                <span th:text="${supplier.getDeliveryPayment().getRussianName().get(supplier.getDeliveryPayment())}" ></span>
             </td>
             <td>
-                <select name="priceComparison">
-                    <option value="below">Ниже среднерыночной</option>
-                    <option value="equal">Соответствует среднерыночной</option>
-                    <option value="1-2%">Выше среднерыночной на 1-2%</option>
-                    <option value="3%">Выше среднерыночной на 3%</option>
-                    <option value="4-5%">Выше среднерыночной на 4-5%</option>
+                <select name="priceComparison" onchange="setPriceComparison()">
+                    <option value="below" th:selected="${supplier.priceComparison == 'Ниже среднерыночной'}">Ниже среднерыночной</option>
+                    <option value="equal" th:selected="${supplier.priceComparison == 'Соответствует среднерыночной'}">Соответствует среднерыночной</option>
+                    <option value="1-2%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 1-2%'}">Выше среднерыночной на 1-2%</option>
+                    <option value="3%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 3%'}">Выше среднерыночной на 3%</option>
+                    <option value="4-5%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 4-5%'}">Выше среднерыночной на 4-5%</option>
                 </select>
+
             </td>
             <td>
                 <span th:text="${supplier.getAverageRating(reviews)}"></span>
@@ -123,6 +132,8 @@
                     <input type="hidden" name="defectsCount" th:value="${supplier.getDefectsCount(defects)}">
                     <input type="hidden" name="reviewsCount" th:value="${supplier.getAverageRating(reviews)}">
                     <input type="hidden" name="failuresCount" th:value="${supplier.getFailuresCount(failures)}">
+                    <input type="hidden" id="priceComparison" name="priceComparison" value="">
+                    <input type="hidden" name="payment" th:value="${supplier.getDeliveryPayment()}">
                     <button type="submit" class="btn btn-primary">Оценить поставщика</button>
                 </form>
             </td>
@@ -151,4 +162,23 @@
             alert("Не прикреплен файл!");
         }
     }
+    function setPriceComparison() {
+        // Получаем выбранный элемент списка
+        var select = document.querySelector('select[name="priceComparison"]');
+        // Получаем выбранное значение
+        var selectedOption = select.value;
+
+        // Если ничего не выбрано пользователем, устанавливаем значение из атрибута th:selected
+        if (!selectedOption) {
+            var defaultOption = select.querySelector('[th\\:selected]');
+            if (defaultOption) {
+                document.getElementById("priceComparison").value = defaultOption.value;
+            }
+        } else {
+            // Если пользователь выбрал что-то, устанавливаем это значение
+            document.getElementById("priceComparison").value = selectedOption;
+        }
+    }
+
+
 </script>

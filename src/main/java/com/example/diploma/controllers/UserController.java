@@ -370,40 +370,46 @@ String getSuccesDefect()
         return "rating";
     }
     @PostMapping("/rate")
-    public String rateSupplier(@RequestParam("supplierId") int supplierId,@RequestParam("defectsCount") int defectsCount, @RequestParam("reviewsCount") double reviewsCount,@RequestParam("failuresCount") int failuresCount) {
+    public String rateSupplier(@RequestParam("supplierId") int supplierId,@RequestParam("defectsCount") int defectsCount, @RequestParam("reviewsCount") double reviewsCount,
+                               @RequestParam("failuresCount") int failuresCount,@RequestParam("priceComparison") String priceComparison, @RequestParam("payment") String payment) {
 
         Supplier supplier = supplierRepo.findById(supplierId).orElse(null);
 
         if (supplier != null) {
 
             // Вычислить оценку поставщика с использованием заданных весов
-            double defectsWeight = 0.5;
-            double reviewsWeight = 0.2;
-            double failuresWeight = 0.3;
+            double defectsWeight = 0.3;
+            double failuresWeight = 0.2;
+            double priceWeight=0.25;
+            double paymentWeight=0.15;
+            double reviewsWeight = 0.1;
+
             int TotalProducts=supplierService.getTotalDeliveredProductsBySupplier(supplier);
             int TotalDeliveries=supplierService.getTotalDeliveredShipmentsBySupplier(supplier);
-            // Вычисляем коэффициент дефектов (defectRatio)
-            double defectRatio =  ((double) defectsCount / TotalProducts);
 
-            // Вычисляем коэффициент срывов поставок (delivery_failure_ratio)
-            double deliveryFailureRatio =  ((double) (TotalDeliveries-failuresCount) / TotalDeliveries);
-            double defectsScore=1+4*defectRatio;
-            double deliveryScore=1+4*deliveryFailureRatio;
-            double supplierRating = reviewsCount * reviewsWeight + defectsScore * defectsWeight + deliveryScore * failuresWeight;
+            double rateDefects= supplier.rateDefects(TotalProducts,defectsCount);
+            double rateFailures=supplier.rateFailures(TotalDeliveries,failuresCount);
+            double ratePrice=supplier.ratePrice(priceComparison);
+            double ratePayment=supplier.ratePayment(payment);
+            double rateReviews=supplier.rateReviews(reviewsCount);
 
-            // Ограничиваем рейтинг максимальным значением 5
-
-            double roundedRating = Math.round(supplierRating * 100.0) / 100.0;
-            // Сохранить округленную оценку поставщика в базе данных или выполнить другие необходимые действия
-            supplier.setRating(roundedRating);
+            double totalRating=(defectsWeight*rateDefects)+(failuresWeight*rateFailures)+(priceWeight*ratePrice)
+                    +(paymentWeight*ratePayment)+(reviewsWeight*rateReviews);
+            supplier.setPriceComparison(ratePrice);
+            supplier.setRating(totalRating);
             supplierRepo.save(supplier);
-
             // Вернуться на страницу с таблицей поставщиков или выполнить другие необходимые действия
             return "redirect:/supplier_reading";
         }
 
         return "error";
     }
+
+
+
+
+
+
     @GetMapping("/userProfile_update")
     public String getEdiProfileForm(Model model, @AuthenticationPrincipal User user)
     {
