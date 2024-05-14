@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head th:insert="blocks/head::head">
+
     <style>
         canvas {
             width: 100%; /* Ширина графика */
@@ -13,6 +14,8 @@
             border-radius: 5px; /* Скругленные углы */
             margin-bottom: 20px; /* Отступ снизу для создания промежутка между графиками */
         }
+
+
     </style>
 </head>
 <body>
@@ -24,8 +27,13 @@
         </div>
         <div class="col-md-7 pl-3 d-flex align-items-center ">
             <br><br>
-            <div class="container mt-4">
-                <div class="row">
+                <div class="container mt-4">
+                    <h6 >Рейтинг поставщиков</h6>
+                    <div id="supplierRatings">
+                        <!-- Здесь будут выводиться рейтинги поставщиков -->
+                    </div>
+
+                    <div class="row">
                     <div class="col-md-4 canvas-container">
                         <h6 id="chartTitle"></h6>
                         <canvas id="defectsChart"></canvas>
@@ -64,5 +72,6 @@
 <script src="/js/order-statusesGraph.js"></script>
 <script src="/js/orderVolume.js"></script>
 <script src="/js/priceInTime_Changes.js"></script>
+<script src="/js/ratingStars.js"></script>
 </body>
 </html>

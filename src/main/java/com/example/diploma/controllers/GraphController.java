@@ -196,6 +196,23 @@ public class GraphController {
         return suppliersData;
     }
 
+    @GetMapping("/ratingStarts")
+    public Map<String, Double> getratingStarts() {
+        // Получаем все отправки из базы данных
+        List<Supplier> suppliers = (List<Supplier>) supplierRepo.findAll();
+
+        // Создаем Map для хранения оценок поставщиков
+        Map<String, Double> ratingsBySupplier = new HashMap<>();
+
+        // Проходимся по списку поставщиков и добавляем их оценки в Map
+        for (Supplier supplier : suppliers) {
+            // В качестве ключа используем имя поставщика
+            // А в качестве значения - его оценку
+            ratingsBySupplier.put(supplier.getCompanyName(), supplier.getRating());
+        }
+
+        return ratingsBySupplier;
+    }
 
 
 

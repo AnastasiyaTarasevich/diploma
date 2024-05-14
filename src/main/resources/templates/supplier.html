@@ -5,16 +5,52 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 p-0">
-            <div th:insert="blocks/supplier_nav::div"></div>
+            <div th:insert="blocks/supplier_nav::div" th:if="${payment != null}"></div>
         </div>
         <div class="col-md-7">
             <h3 class="text-center mt-5">Привет, <span th:text="${login}"></span></h3>
+            <input type="hidden" id="userLogin" th:value="${login}">
+            <div class="text-center mb-4" th:if="${payment == null || payment == 'NONE'}">
+                <h3 class="mt-5">Пожалуйста, отметьте свои условия поставки </h3>
+                <div class="d-inline-flex flex-wrap justify-content-center">
+                    <button type="button" class="btn btn-outline-primary btn-lg mx-2 my-3" th:each="payment : ${T(com.example.diploma.models.DeliveryPayment).values()}"
+                            th:attr="data-payment=${payment}"
+                            th:text="${payment.getRussianName().get(payment)}"
+                            onclick="addPayment(this.getAttribute('data-payment'))">
+                    </button>
+                </div>
+            </div>
             <div style="flex-grow: 1;">
                 <img src="https://img.freepik.com/free-vector/worldwide-shipping-service-international-distribution-collaborative-logistics-supply-chain-partners-freight-cost-optimization-concept-pinkish-coral-bluevector-isolated-illustration_335657-1757.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+
 
             </div>
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    function addPayment(payment) {
+        var login = document.getElementById('userLogin').value;
+        fetch('/addPayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({payment: payment,login:login})
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Условия оплаты успешно добавлены!');
+                   location.reload();
+                } else {
+                    alert('Ошибка при добавлении условий оплаты.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+            });
+    }
+</script>
+
 </body>
 </html>

@@ -2,7 +2,9 @@ package com.example.diploma.controllers;
 
 
 import com.example.diploma.models.Roles;
+import com.example.diploma.models.Supplier;
 import com.example.diploma.models.User;
+import com.example.diploma.repos.SupplierRepo;
 import com.example.diploma.repos.UserRepo;
 import com.example.diploma.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class HelloController {
     private String secret;
     private final UserService userService;
     private final UserRepo userRepo;
+    private final SupplierRepo supplierRepo;
 
     private final RestTemplate restTemplate;
     @GetMapping("/")
@@ -119,6 +122,8 @@ public class HelloController {
         String username = user.getUsername();
         userService.changeStatusOnline(username);
         // Сохранение ника пользователя в сессии
+        Supplier supplier=supplierRepo.findByIdUser(user.getIdUser());
+        model.addAttribute("payment",supplier.getDeliveryPayment());
         session.setAttribute("username", username);
         model.addAttribute("username", username);
         model.addAttribute("tittle","Страница поставщика");

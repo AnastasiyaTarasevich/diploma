@@ -10,19 +10,80 @@
         </div>
         <div class="col-md-7">
             <br><br>
+
+            <div class="container table-container">
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Критерий</th>
+                        <th scope="col">5 баллов</th>
+                        <th scope="col">4 балла</th>
+                        <th scope="col">3 балла</th>
+                        <th scope="col">2 балла</th>
+                        <th scope="col">1 балл</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1. Качество товара</td>
+                        <td>100 % без брака</td>
+                        <td>брак составляет 2-5%</td>
+                        <td>брак составляет 5-10%</td>
+                        <td>брак составляет 11-20%</td>
+                        <td>брак составляет 21-30%</td>
+                    </tr>
+                    <tr>
+                        <td>2. Количество задержек</td>
+                        <td>100% без задержек</td>
+                        <td>задержки составляют 5-10%</td>
+                        <td>задержки составляют 11-20%</td>
+                        <td>задержки составляют 21-30%</td>
+                        <td>задержки составляют 30-40%</td>
+                    </tr>
+                    <tr>
+                        <td>3. Цена</td>
+                        <td>ниже среднерыночной</td>
+                        <td>соответствует среднерыночной</td>
+                        <td>выше среднерыночной на 1-2%</td>
+                        <td>выше среднерыночной на 3%</td>
+                        <td>выше среднерыночной на 4-5%</td>
+                    </tr>
+                    <tr>
+                        <td>4. Условия оплаты</td>
+                        <td>всевозможные</td>
+                        <td>по факту поставки</td>
+                        <td>25% предоплаты</td>
+                        <td>50% предоплаты</td>
+                        <td>100% предоплаты</td>
+                    </tr>
+                    <tr>
+                        <td>5. Отзывы</td>
+                        <td>4,5-5</td>
+                        <td>3,5-4</td>
+                        <td>2,5-3</td>
+                        <td>1,5-2</td>
+                        <td>0,5-1</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 <div class="container table-container">
     <table class="table table-striped">
         <colgroup>
-            <col style="width: 30%">
-            <col style="width: 20%">
-            <col style="width: 25%">
-            <col style="width: 25%">
+            <col style="width: 16%">
+            <col style="width: 16%">
+            <col style="width: 16%">
+            <col style="width: 16%">
+            <col style="width: 16%">
+            <col style="width: 16%">
         </colgroup>
         <thead class="table-dark">
         <tr>
             <th scope="col">Название компании</th>
             <th scope="col">Количество срывов поставок</th>
             <th scope="col">Количество брака в поставках</th>
+            <th scope="col">Условия оплаты</th>
+            <th scope="col">Соответствие цен на товары среднерыночным</th>
             <th scope="col">Средняя оценка по отзывам</th>
             <th scope="col">Общий рейтинг поставщика</th>
             <th scope="col">Оценить</th>
@@ -37,6 +98,18 @@
             </td>
             <td>
                 <span th:text="${supplier.getDefectsCount(defects)}"></span>
+            </td>
+            <td>
+                <span ></span>
+            </td>
+            <td>
+                <select name="priceComparison">
+                    <option value="below">Ниже среднерыночной</option>
+                    <option value="equal">Соответствует среднерыночной</option>
+                    <option value="1-2%">Выше среднерыночной на 1-2%</option>
+                    <option value="3%">Выше среднерыночной на 3%</option>
+                    <option value="4-5%">Выше среднерыночной на 4-5%</option>
+                </select>
             </td>
             <td>
                 <span th:text="${supplier.getAverageRating(reviews)}"></span>

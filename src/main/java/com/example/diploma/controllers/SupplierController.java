@@ -27,6 +27,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -300,7 +301,9 @@ public class SupplierController
     @GetMapping("/createContract")
     public String ShowFormcreateContract(@RequestParam("orderId") int orderId,Model model)
     {
+        Order order=orderRepo.getById(orderId);
         model.addAttribute("orderId", orderId);
+        model.addAttribute("order", order);
         model.addAttribute("tittle", "Создание нового контракта");
 
         return "createContract";
@@ -385,6 +388,21 @@ public class SupplierController
         // Передаем список поставок в модель
         model.addAttribute("userShipments", userShipments);
         return "supplier_shipments";
+    }
+    @PostMapping("/addPayment")
+    public ResponseEntity<String> addPayment(@RequestBody Map<String, String> payload) {
+        String paymentName = payload.get("payment"); // Получить строковое представление платежа
+        String login = payload.get("login");
+
+        // Преобразовать строковое представление платежа обратно в объект DeliveryPayment
+        DeliveryPayment payment = DeliveryPayment.valueOf(paymentName);
+
+        User user = userRepo.findByLogin(login);
+        Supplier supplier = supplierRepo.findByIdUser(user.getIdUser());
+        supplier.setDeliveryPayment(payment);
+        supplierRepo.save(supplier);
+
+        return ResponseEntity.ok().build();
     }
 
 

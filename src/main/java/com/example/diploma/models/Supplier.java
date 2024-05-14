@@ -29,6 +29,11 @@ public class Supplier {
     private Integer idUser;
 //    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "supplier")
 //    private User user;
+    @Basic
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private DeliveryPayment deliveryPayment;
+
     public int getIdsupplier() {
         return idsupplier;
     }
@@ -124,5 +129,13 @@ public class Supplier {
 
     public double getRating() {
         return rating;
+    }
+
+    public DeliveryPayment getDeliveryPayment() {
+        return deliveryPayment;
+    }
+
+    public void setDeliveryPayment(DeliveryPayment deliveryPayment) {
+        this.deliveryPayment = deliveryPayment;
     }
 }
