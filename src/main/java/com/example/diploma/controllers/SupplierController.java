@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +60,7 @@ public class SupplierController
         Supplier supplier=supplierRepo.findByIdUser(user.getIdUser());
         if (supplier != null) {
             // Получение каталога продуктов только для данного поставщика
-            Iterable<Product> products = productRepo.findProductsBySupplierId(supplier.getIdsupplier()); // Предполагается, что у вас есть репозиторий productRepo для работы с продуктами
+            Iterable<Product> products = productRepo.findProductsBySupplierIdAndStatus(supplier.getIdsupplier(),null);
 
             model.addAttribute("products", products);
             model.addAttribute("title", "Каталог товаров");
@@ -146,11 +145,10 @@ public class SupplierController
         return"redirect:/prod_details/{id}";
     }
     @PostMapping("/list_prod/{id}")
-    public String productDelete(@PathVariable int id,Model model)
+    public String productDelete(@PathVariable int id)
     {
         Product product=productRepo.findById(id).orElseThrow();
-        product.setCategory(null);
-        productRepo.save(product);
+        product.setStatus("Удален");
         productRepo.delete(product);
         return "redirect:/catalog";
     }
@@ -299,11 +297,20 @@ public class SupplierController
     }
 
     @GetMapping("/createContract")
-    public String ShowFormcreateContract(@RequestParam("orderId") int orderId,Model model)
+    public String ShowFormcreateContract(@RequestParam("orderId") int orderId,@AuthenticationPrincipal User userSession,Model model)
     {
         Order order=orderRepo.getById(orderId);
+        User user=userRepo.findByLogin(userSession.getUsername());
+        Supplier supplier=supplierRepo.findByIdUser(user.getIdUser());
+        List<OrderItem> orderItems = orderItemRepo.getOrderItemByOrderAndSupplier(order,supplier);
+
+        // Рассчитываем общую стоимость заказа
+        double totalPrice = 0.0;
+        for (OrderItem item : orderItems) {
+            totalPrice += item.getProduct().getPrice() * item.getQuantity();
+        }
         model.addAttribute("orderId", orderId);
-        model.addAttribute("order", order);
+        model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("tittle", "Создание нового контракта");
 
         return "createContract";

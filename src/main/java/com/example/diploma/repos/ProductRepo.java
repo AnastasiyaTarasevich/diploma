@@ -21,7 +21,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 
     @Query(value = "SELECT max(price) FROM Product ")
     BigDecimal maxProductPrice();
-    List<Product> findProductsBySupplierId(int supplierId);
 
+    List<Product> findProductsBySupplierIdAndStatus(int supplierId, String Product_status);
 
 }

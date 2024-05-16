@@ -198,13 +198,13 @@ public class Supplier {
 
     public double ratePrice(String priceComparison)
     {
-        if (priceComparison.equals("below")) {
+        if (priceComparison.equals("Ниже среднерыночной")) {
             return  5; // 5 баллов
-        } else if (priceComparison.equals("equal")) {
+        } else if (priceComparison.equals("Соответствует среднерыночной")) {
             return  4; // 4 балла
-        } else if (priceComparison.equals("1-2%")) {
+        } else if (priceComparison.equals("Выше среднерыночной на 1-2%")) {
             return  3; // 3 балла
-        } else if (priceComparison.equals("3%")) {
+        } else if (priceComparison.equals("Выше среднерыночной на 3%")) {
             return  2; // 2 балла
         } else {
             return 1; // 1 балл

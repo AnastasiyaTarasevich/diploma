@@ -47,7 +47,7 @@ public class CategoryService
     }
     public List<Category> getAllCategoriesForSupplier(int supplierId) {
         // Загрузка всех товаров для указанного поставщика
-        List<Product> products = productRepo.findProductsBySupplierId(supplierId);
+        List<Product> products = productRepo.findProductsBySupplierIdAndStatus(supplierId,null);
 
         // Собираем уникальные категории товаров данного поставщика
         Set<Category> categories = new HashSet<>();

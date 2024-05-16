@@ -55,7 +55,7 @@ public class UserController
     public String getCatalog(@RequestParam(name="name",required = false) String name, @PathVariable int id, Model model)
     {
 
-            Iterable<Product> products = productRepo.findProductsBySupplierId(id);
+            Iterable<Product> products = productRepo.findProductsBySupplierIdAndStatus(id,null);
             model.addAttribute("products", products);
         List<Category>category=categoryService.getAllCategoriesForSupplier(id);
         model.addAttribute("categories",category);
@@ -78,7 +78,7 @@ public class UserController
     @PostMapping("/supplier_catalog/{supplierId}")
     public String filters(@RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort,@PathVariable int supplierId,  Model model)
     {
-        List<Product> products=productRepo.findProductsBySupplierId(supplierId);
+        List<Product> products=productRepo.findProductsBySupplierIdAndStatus(supplierId,null);
         // выполнить необходимые действия для обработки фильтров и сортировки
       List<Category>category=categoryService.getAllCategoriesForSupplier(supplierId);
         model.addAttribute("categories",category);
@@ -100,20 +100,19 @@ public class UserController
         model.addAttribute("categories",category1);
         return "supplier_catalog";
     }
-//    @PostMapping("/supplier_catalog/{supplierId}/{categoryName}")
-//    public String sortCat(@PathVariable int supplierId,@PathVariable String categoryName, @RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort, Model model)
-//    {
-//        Category category=new Category();
-//        category.setName(categoryName);
-//        // выполнить необходимые действия для обработки фильтров и сортировки
-//        List<Product>  products = productService.findProductByCategoryAndSupplier(category,supplierId);
-//        Iterable<Category> category1= categoryService.getAllCategoriesForSupplier(supplierId);
-//        model.addAttribute("categories",category1);
-//        List<Product> filteredProducts = productService.getFilteredProducts(products,sort);
-//        // добавить результаты в модель и вернуть представление
-//        model.addAttribute("products", filteredProducts);
-//        return "supplier_catalog";
-//    }
+    @PostMapping("/supplier_catalog/{supplierId}/{categoryId}")
+    public String sortCat(@PathVariable int supplierId,@PathVariable int categoryId, @RequestParam(name = "sort", required = false, defaultValue = "price_asc") String sort, Model model)
+    {
+       Category category=categoryRepo.getById(categoryId);
+        // выполнить необходимые действия для обработки фильтров и сортировки
+        List<Product>  products = productService.findProductByCategoryAndSupplier(category,supplierId);
+        Iterable<Category> category1= categoryService.getAllCategoriesForSupplier(supplierId);
+        model.addAttribute("categories",category1);
+        List<Product> filteredProducts = productService.getFilteredProducts(products,sort);
+        // добавить результаты в модель и вернуть представление
+        model.addAttribute("products", filteredProducts);
+        return "supplier_catalog";
+    }
 
     @GetMapping("/supplier_catalog/search")
     public String productFind(@RequestParam (name="keyword")String key, @PathVariable int id, Model model)
@@ -395,8 +394,9 @@ String getSuccesDefect()
 
             double totalRating=(defectsWeight*rateDefects)+(failuresWeight*rateFailures)+(priceWeight*ratePrice)
                     +(paymentWeight*ratePayment)+(reviewsWeight*rateReviews);
+            double roundedRating = Math.round(totalRating * 100.0) / 100.0;
             supplier.setPriceComparison(ratePrice);
-            supplier.setRating(totalRating);
+            supplier.setRating(roundedRating);
             supplierRepo.save(supplier);
             // Вернуться на страницу с таблицей поставщиков или выполнить другие необходимые действия
             return "redirect:/supplier_reading";

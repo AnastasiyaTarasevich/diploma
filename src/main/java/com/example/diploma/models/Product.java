@@ -36,6 +36,10 @@ public class Product {
     private String vendor_code;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<PriceInTime> prices;
+
+    @Basic
+    @Column(name="status", nullable = true)
+    private String status;
     public void addPrice(PriceInTime price) {
         prices.add(price);
         price.setProduct(this); // Устанавливаем ссылку на этот продукт у добавленной цены
@@ -63,5 +67,6 @@ public class Product {
     private Supplier supplier;
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems;
+
 
 }

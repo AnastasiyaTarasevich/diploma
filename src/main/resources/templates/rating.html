@@ -111,12 +111,12 @@
                 <span th:text="${supplier.getDeliveryPayment().getRussianName().get(supplier.getDeliveryPayment())}" ></span>
             </td>
             <td>
-                <select name="priceComparison" onchange="setPriceComparison()">
-                    <option value="below" th:selected="${supplier.priceComparison == 'Ниже среднерыночной'}">Ниже среднерыночной</option>
-                    <option value="equal" th:selected="${supplier.priceComparison == 'Соответствует среднерыночной'}">Соответствует среднерыночной</option>
-                    <option value="1-2%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 1-2%'}">Выше среднерыночной на 1-2%</option>
-                    <option value="3%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 3%'}">Выше среднерыночной на 3%</option>
-                    <option value="4-5%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 4-5%'}">Выше среднерыночной на 4-5%</option>
+                <select name="priceComparison" onchange="setPriceComparison(this)">
+                    <option value="Ниже среднерыночной" th:selected="${supplier.priceComparison == 'Ниже среднерыночной'}">Ниже среднерыночной</option>
+                    <option value="Соответствует среднерыночной" th:selected="${supplier.priceComparison == 'Соответствует среднерыночной'}">Соответствует среднерыночной</option>
+                    <option value="Выше среднерыночной на 1-2%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 1-2%'}">Выше среднерыночной на 1-2%</option>
+                    <option value="Выше среднерыночной на 3%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 3%'}">Выше среднерыночной на 3%</option>
+                    <option value="Выше среднерыночной на 4-5%" th:selected="${supplier.priceComparison == 'Выше среднерыночной на 4-5%'}">Выше среднерыночной на 4-5%</option>
                 </select>
 
             </td>
@@ -132,7 +132,7 @@
                     <input type="hidden" name="defectsCount" th:value="${supplier.getDefectsCount(defects)}">
                     <input type="hidden" name="reviewsCount" th:value="${supplier.getAverageRating(reviews)}">
                     <input type="hidden" name="failuresCount" th:value="${supplier.getFailuresCount(failures)}">
-                    <input type="hidden" id="priceComparison" name="priceComparison" value="">
+                    <input type="hidden" class="hidden-price-comparison" name="priceComparison" th:value="${supplier.priceComparison}">
                     <input type="hidden" name="payment" th:value="${supplier.getDeliveryPayment()}">
                     <button type="submit" class="btn btn-primary">Оценить поставщика</button>
                 </form>
@@ -162,23 +162,19 @@
             alert("Не прикреплен файл!");
         }
     }
-    function setPriceComparison() {
-        // Получаем выбранный элемент списка
-        var select = document.querySelector('select[name="priceComparison"]');
-        // Получаем выбранное значение
-        var selectedOption = select.value;
 
-        // Если ничего не выбрано пользователем, устанавливаем значение из атрибута th:selected
-        if (!selectedOption) {
-            var defaultOption = select.querySelector('[th\\:selected]');
-            if (defaultOption) {
-                document.getElementById("priceComparison").value = defaultOption.value;
-            }
-        } else {
-            // Если пользователь выбрал что-то, устанавливаем это значение
-            document.getElementById("priceComparison").value = selectedOption;
+
+
+    function setPriceComparison(select) {
+        var selectedOption = select.value;
+        var hiddenInput = select.closest('tr').querySelector('.hidden-price-comparison');
+
+        if (selectedOption !== "") {
+            hiddenInput.value = selectedOption;
         }
     }
+
+
 
 
 </script>

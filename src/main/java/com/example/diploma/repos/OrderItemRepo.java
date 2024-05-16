@@ -1,10 +1,7 @@
 package com.example.diploma.repos;
 
 
-import com.example.diploma.models.Order;
-import com.example.diploma.models.OrderItem;
-import com.example.diploma.models.OrderStatus;
-import com.example.diploma.models.Supplier;
+import com.example.diploma.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +19,8 @@ public interface OrderItemRepo extends JpaRepository<OrderItem, Integer> {
     List<OrderItem> findBySupplierAndStatus(Supplier supplier, OrderStatus orderStatus);
 
     List<OrderItem> findByStatus(OrderStatus orderStatus);
+
+    List<OrderItem> findByProduct(Product product);
+
+    List<OrderItem> getOrderItemByOrderAndSupplier(Order order,Supplier supplier);
 }
