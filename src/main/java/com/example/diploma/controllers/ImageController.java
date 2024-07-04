@@ -20,7 +20,7 @@ public class ImageController {
     private final ImageRepo imageRepo;
 
     @GetMapping("/list_prod/{id}")
-    private ResponseEntity<?> getImageById(@PathVariable Long id)
+    public ResponseEntity<?> getImageById(@PathVariable Long id)
     {
         Image image=imageRepo.findById(id).orElse(null);
         Base64.Decoder decoder = Base64.getDecoder();

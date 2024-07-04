@@ -191,6 +191,13 @@ public class AdminController {
         model.addAttribute("contracts", contracts);
         return "allContracts";
     }
+
+    @GetMapping("/allContractsForAdmin")
+    public String getAllContracts( Model model) {
+        List<Contract> contracts=contractsRepo.findAll();
+        model.addAttribute("contracts", contracts);
+        return "allContractsForAdmin";
+    }
     @GetMapping("/Adminsupplier_reading")
     public String readSupplier(Model model)
     {
@@ -198,4 +205,6 @@ public class AdminController {
         model.addAttribute("suppliers",suppliers);
         return "supplier_reading";
     }
+
+
 }

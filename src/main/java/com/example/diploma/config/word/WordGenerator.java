@@ -93,7 +93,6 @@ public class WordGenerator {
             XWPFRun orderSignatureRun = signaturesParagraph.createRun();
             orderSignatureRun.setText("Подпись заказчика: _________________________");
             orderSignatureRun.addBreak();
-            orderSignatureRun.addBreak();
             orderSignatureRun.setFontFamily("Times New Roman");
             orderSignatureRun.setFontSize(14);
 
@@ -107,7 +106,7 @@ public class WordGenerator {
 
                 // Вставляем изображение в документ
                 int format = XWPFDocument.PICTURE_TYPE_PNG; // Формат изображения (PNG)
-                stampRun.addPicture(inputStream, format, imagePath, Units.toEMU(150), Units.toEMU(150));
+                stampRun.addPicture(inputStream, format, imagePath, Units.toEMU(80), Units.toEMU(80));
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InvalidFormatException e) {

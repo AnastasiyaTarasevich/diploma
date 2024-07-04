@@ -20,7 +20,7 @@
             <th scope="col">Дата прибытия</th>
             <th scope="col">Заказчик</th>
             <th scope="col">Товары</th>
-            <th scope="col">Действия над поставкой</th>
+
             <th scope="col"></th>
         </tr>
         </thead>
@@ -43,21 +43,11 @@
                     </li>
                 </ul>
             </th>
-            <th>
-                <form th:action="@{/deleteSh}" method="post">
-                    <input type="hidden" name="shipmentId" th:value="${sh.getIdshipment()}" />
-                    <button type="submit" class="btn btn-primary change-status" th:attr="data-shid=${sh.getIdshipment()}" >Удалить</button>
-                </form>
 
-
-
-            </th>
         </tr>
         </tbody>
     </table>
 </div>
-
-
 
 
 </body>
